@@ -1,0 +1,7 @@
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+# 原始模型包与中间产物不入库，来源与校验值见 ASSETS.md
+*.zip
+/data/raw/
