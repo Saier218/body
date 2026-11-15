@@ -1,0 +1,24 @@
+<view class="page">
+  <canvas wx:if="{{showCanvas}}" type="{{canvasType}}" id="gl" class="stage"
+          bindtouchstart="onTouchStart" bindtouchmove="onTouchMove"
+          bindtouchend="onTouchEnd" bindtouchcancel="onTouchEnd"></canvas>
+
+  <view class="panel">
+    <view class="title">{{title}}</view>
+    <view class="sub" wx:if="{{subtitle}}">{{subtitle}}</view>
+
+    <view class="row">
+      <view wx:for="{{layers}}" wx:key="kind" class="chip {{item.on ? 'on' : ''}}"
+            data-kind="{{item.kind}}" bindtap="onToggleLayer">{{item.label}}</view>
+    </view>
+
+    <view class="row">
+      <view class="btn" wx:if="{{focused}}" bindtap="onBack">{{text.back}}</view>
+      <view class="btn" bindtap="onBenchmark">{{benchLabel}}</view>
+      <view class="btn" bindtap="onToggleLang">{{text.lang}}</view>
+    </view>
+
+    <view class="diag-title">{{text.diagnostics}}</view>
+    <view class="diag" wx:for="{{diag}}" wx:key="*this">{{item}}</view>
+  </view>
+</view>

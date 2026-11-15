@@ -1,0 +1,14 @@
+{
+  "description": "body 小程序技术验证工程",
+  "compileType": "miniprogram",
+  "appid": "touristappid",
+  "projectname": "body-spike",
+  "libVersion": "3.5.8",
+  "setting": {
+    "useCompilerPlugins": ["typescript"],
+    "es6": true,
+    "enhance": true,
+    "minified": true,
+    "urlCheck": true
+  }
+}

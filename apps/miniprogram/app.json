@@ -1,0 +1,11 @@
+{
+  "pages": ["pages/viewer/viewer"],
+  "window": {
+    "navigationBarTitleText": "3D 技术验证",
+    "navigationBarBackgroundColor": "#15171c",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#15171c"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

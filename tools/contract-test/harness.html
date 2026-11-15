@@ -1,0 +1,76 @@
+<!doctype html><meta charset="utf8"><title>pending</title>
+<style>body{margin:0;background:#000}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>
+// Runs the built viewer core the way a mini program would: no DOM or browser globals in scope,
+// and a canvas that exposes only the members a WeChat canvas node has.
+(async () => {
+  const out = { steps: [] };
+  const step = (name, value) => out.steps.push([name, value]);
+  try {
+    const W = 390, H = 480, DPR = 2;
+    const real = document.getElementById('c');
+    real.width = W * DPR; real.height = H * DPR; real.style.width = W + 'px'; real.style.height = H + 'px';
+    const touched = new Set();
+    const allowed = new Set(['width', 'height', 'getContext', 'requestAnimationFrame', 'cancelAnimationFrame']);
+    const host = new Proxy({}, {
+      get(_, k) {
+        if (!allowed.has(k)) { touched.add(String(k)); return undefined; }
+        if (k === 'getContext') return (t, a) => real.getContext(t, Object.assign({ preserveDrawingBuffer: true }, a));
+        if (k === 'requestAnimationFrame') return (cb) => requestAnimationFrame(cb);
+        if (k === 'cancelAnimationFrame') return (id) => cancelAnimationFrame(id);
+        return real[k];
+      },
+      set(_, k, v) { if (!allowed.has(k)) { touched.add('set ' + String(k)); return true; } real[k] = v; return true; },
+    });
+    const code = await (await fetch('/apps/miniprogram/libs/viewer-core.js')).text();
+    const banned = ['document', 'window', 'self', 'navigator', 'TextDecoder', 'fetch', 'performance', 'requestAnimationFrame', 'globalThis', 'Blob', 'URL', 'Image', 'createImageBitmap'];
+    const mod = { exports: {} };
+    new Function('module', 'exports', ...banned, code)(mod, mod.exports);
+    step('bundle evaluated without browser globals', true);
+    const glb = await (await fetch('/models/generated/hand_right.glb')).arrayBuffer();
+    const catalog = await (await fetch('/apps/miniprogram/models/hand_right.catalog.json')).json();
+    const v = mod.exports.createViewer({ canvas: host, width: W, height: H, pixelRatio: DPR });
+    const t0 = Date.now();
+    v.load(glb, catalog);
+    step('load ms', Date.now() - t0);
+    const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    await frame();
+    const s = v.stats();
+    step('stats', s);
+    const gl = real.getContext('webgl2');
+    const px = new Uint8Array(4 * 40 * 40);
+    const lit = () => { gl.readPixels(W * DPR / 2 - 20, H * DPR / 2 - 20, 40, 40, gl.RGBA, gl.UNSIGNED_BYTE, px); let n = 0; for (let i = 0; i < px.length; i += 4) if (px[i] > 60) n++; return n; };
+    step('centre pixels lit', lit());
+    let tapped;
+    v.onTap = (id) => { tapped = id; };
+    // sweep a grid for a point that hits a structure, then tap exactly there
+    let hit = null;
+    for (let y = 60; y < H && !hit; y += 30) for (let x = 40; x < W && !hit; x += 30) { const id = v.pick(x, y); if (id) hit = { x, y, id }; }
+    step('pick found', hit);
+    v.touchStart([{ x: hit.x, y: hit.y }]); v.touchEnd([]);
+    step('tap reported same id', tapped === hit.id);
+    const e = v.entry(hit.id);
+    v.select(hit.id); v.focusGroup(e.group);
+    await new Promise((r) => setTimeout(r, 600)); await frame();
+    step('focused group', e.group);
+    window.__shot = 'focus';
+    await new Promise((r) => setTimeout(r, 150));
+    // drag must rotate and must not count as a tap
+    tapped = 'none';
+    v.touchStart([{ x: 100, y: 200 }]); v.touchMove([{ x: 160, y: 220 }]); v.touchEnd([]);
+    step('drag is not a tap', tapped === 'none');
+    v.setKindVisible('muscle', false); await frame();
+    const pickNoMuscle = new Set();
+    for (let y = 40; y < H; y += 20) for (let x = 20; x < W; x += 20) { const id = v.pick(x, y); if (id) pickNoMuscle.add(v.entry(id).kind); }
+    step('hidden layer cannot be picked', !pickNoMuscle.has('muscle') && pickNoMuscle.size > 0);
+    v.setKindVisible('muscle', true); v.focusGroup(null); v.select(null);
+    await new Promise((r) => setTimeout(r, 600)); await frame();
+    const fps = await new Promise((r) => v.benchmark(1.5, r));
+    step('benchmark fps (software GL here, not a device number)', Math.round(fps));
+    step('host canvas members used beyond the contract', [...touched]);
+    out.ok = true;
+  } catch (err) { out.ok = false; out.error = String(err && err.stack || err); }
+  window.__result = out; document.title = 'done';
+})();
+</script>
