@@ -1,0 +1,58 @@
+{
+  "_note": "Lengths are proximal-distal extents in mm. Finger values are per-finger means from heras2024 (Table 1 and Table 2); thumb values are the type III (most frequent) means from gnanasekaran2018 (Tables 1 and 2). Positions along the bone are DERIVED by chaining these lengths and gaps from the stated joint anchors and fitting them to this model's bone lengths; they are not measured positions. status=sourced means lengths and incidence were checked against the paper's tables; position_status=derived means placement still needs expert review.",
+  "sources": {
+    "heras2024": {
+      "citation": "De Las Heras J, Simón de Blas C, et al. What is new in flexor tendon pulleys and the gaps between them in triphalangeal fingers of the hand? J Anat. 2024.",
+      "pmid": "38419199", "pmcid": "PMC11161822", "evidence_grade": "B",
+      "sample": "192 triphalangeal fingers from 48 fresh donor hands",
+      "accessed": "2026-11-15", "reuse": "facts cited only; article is CC BY-NC-ND, no text or figures reused"
+    },
+    "gnanasekaran2018": {
+      "citation": "Gnanasekaran D, Veeramani R, Karuppusamy A. Morphometric study of pulleys of the thumb. Anat Cell Biol. 2018;51(2):71.",
+      "pmid": "29984050", "pmcid": "PMC6026824", "doi": "10.5115/acb.2018.51.2.71", "evidence_grade": "B",
+      "sample": "55 thumbs from 28 fresh cadavers",
+      "accessed": "2026-11-15", "reuse": "facts cited only; article is CC BY-NC, no text or figures reused"
+    }
+  },
+  "fingers": {
+    "source": "heras2024",
+    "order": ["index", "middle", "ring", "little"],
+    "pulleys": {
+      "A1": {"length": [9.68, 9.49, 8.40, 7.26], "incidence": 1.000, "anchor": "from the MCP palmar plate to the proximal part of the proximal phalanx"},
+      "A2": {"length": [15.70, 19.07, 17.54, 11.45], "incidence": 1.000, "anchor": "proximal phalanx"},
+      "C1": {"length": [7.75, 8.28, 7.47, 7.80], "incidence": 0.755, "anchor": "distal third of the proximal phalanx"},
+      "A3": {"length": [3.26, 3.34, 3.13, 3.12], "incidence": 0.901, "anchor": "PIP joint"},
+      "C2": {"length": [3.32, 4.70, 4.53, 4.32], "incidence": 0.135, "anchor": "proximal third of the middle phalanx"},
+      "A4": {"length": [7.34, 8.46, 8.52, 7.33], "incidence": 1.000, "anchor": "middle phalanx"},
+      "C3": {"length": [4.63, 6.14, 5.19, 4.39], "incidence": 0.396, "anchor": "distal to A4"},
+      "A5": {"length": [2.59, 2.65, 2.75, 2.52], "incidence": 0.515, "anchor": "begins at the DIP joint",
+             "_note": "ring-finger cell in the published table reads 31.19, an evident misprint; the global mean 2.75 is used instead"}
+    },
+    "gaps": {
+      "A1-A2": {"length": [2.93, 2.65, 2.42, 3.07], "incidence": 0.818},
+      "A2-C1": {"length": [0.96, 2.21, 1.08, 0.67], "incidence": 0.089},
+      "C1-A3": {"length": [4.21, 4.52, 4.00, 3.01], "incidence": 0.556},
+      "A3-C2": {"length": [2.53, 3.00, 3.02, 1.19], "incidence": 0.078},
+      "C2-A4": {"length": [2.27, 4.87, 3.18, 3.06], "incidence": 0.0625},
+      "A4-C3": {"length": [0.0, 0.0, 2.49, 0.68], "incidence": 0.021},
+      "C3-A5": {"length": [3.20, 2.05, 1.83, 0.98], "incidence": 0.0677}
+    },
+    "pattern_note": "All eight pulleys together were found in only 3 of 192 fingers (1.56%); the most frequent pattern was A1-A2-C1-A3-A4 (18.22%). The model shows the full classical set as a reference scheme; the app must present C2, C3 and A5 as frequently absent."
+  },
+  "thumb": {
+    "source": "gnanasekaran2018",
+    "type_modelled": "III (54.55% of thumbs): A1, Av, oblique and A2 all present, Av fibres oblique",
+    "pulleys": {
+      "A1": {"length": 5.09, "anchor": "anterior to the MCP joint, extending to the base of the proximal phalanx"},
+      "Av": {"length": 5.64, "anchor": "proximal part of the proximal phalanx", "incidence": 0.927},
+      "oblique": {"length": 4.66, "anchor": "proximal phalanx, distal to Av", "incidence": 0.982},
+      "A2": {"length": 5.88, "anchor": "anterior to the interphalangeal joint"}
+    },
+    "gaps": {"A1-Av": 3.89, "Av-oblique": 2.97, "oblique-A2": 4.93},
+    "unverified": ["Direction of the oblique pulley (ulnar proximally to radial distally) follows the classical description and the paper's wording for type III Av fibres; not yet checked against a primary source for the oblique pulley itself."]
+  },
+  "schematic_choices": {
+    "_note": "Not taken from a source; chosen for legibility and flagged as such.",
+    "annular_thickness_mm": 0.7, "cruciform_thickness_mm": 0.4, "cruciform_strip_width_mm": 1.7, "clearance_mm": 0.15
+  }
+}
