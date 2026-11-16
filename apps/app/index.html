@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <title>body</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <canvas id="gl" class="stage"></canvas>
+      <section class="panel">
+        <h1 id="title" class="title"></h1>
+        <p id="subtitle" class="sub"></p>
+        <div id="layers" class="row"></div>
+        <div class="row">
+          <button id="back" class="btn" hidden></button>
+          <button id="bench" class="btn"></button>
+          <button id="lang" class="btn"></button>
+        </div>
+        <p id="diag-title" class="diag-title"></p>
+        <pre id="diag" class="diag"></pre>
+        <p id="credit" class="credit"></p>
+      </section>
+    </main>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

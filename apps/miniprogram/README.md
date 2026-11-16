@@ -1,3 +1,5 @@
+> **已冻结。** 首发平台已改为 App（见 `docs/decisions/0004-app-first-with-web-shell.md`）。这个文件夹保留作日后轻量入口的起点，不再维护，其中的做法从未在微信开发者工具或真机上验证过。
+
 # 小程序技术验证工程
 
 用微信开发者工具打开**这个文件夹**（`apps/miniprogram`），不是仓库根目录。
@@ -9,4 +11,4 @@
 5. 点"预览"生成二维码，用手机微信扫码在真机上再试一遍（WebGL 不支持"真机调试"，只能用"预览"）。
 6. 在真机上点"跑性能测试"，等 4 秒，把屏幕下方的诊断信息截图。
 
-`libs/viewer-core.js` 和 `models/` 是构建产物，不要手改。重新生成：在仓库根目录运行 `npm run build:core`，模型见 `tools/modeling/build_app_model.py`。
+`libs/viewer-core.js` 和 `models/` 是构建产物，不要手改。重新生成：在仓库根目录运行 `npm run build:core:miniprogram`，模型见 `tools/modeling/build_app_model.py`。

@@ -123,7 +123,8 @@ glb = struct.pack("<III", 0x46546C67, 2, 12 + 8 + len(js) + 8 + len(blob)) + str
 open(out + ".glb", "wb").write(glb)
 br = brotli.compress(glb, quality=11)
 open(app + ".glb.br", "wb").write(br)
-json.dump([p[3] for p in parts], open(app + ".catalog.json", "w"), ensure_ascii=False, separators=(",", ":"))
+for prefix in (out, app):
+    json.dump([p[3] for p in parts], open(prefix + ".catalog.json", "w"), ensure_ascii=False, separators=(",", ":"))
 kinds = {}
 for p in parts:
     kinds[p[3]["kind"]] = kinds.get(p[3]["kind"], 0) + 1

@@ -2,16 +2,31 @@
   "name": "body",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit -p .",
-    "build:core": "esbuild packages/viewer-core/src/index.ts --bundle --format=cjs --target=es2018 --minify --legal-comments=none --outfile=apps/miniprogram/libs/viewer-core.js",
-    "test:contract": "node tools/contract-test/run.js",
-    "check": "npm run typecheck && npm run build:core && npm run test:contract"
+    "sync:models": "node tools/sync-models.mjs",
+    "dev": "npm run sync:models && vite apps/app --host",
+    "build": "npm run sync:models && vite build apps/app",
+    "typecheck": "tsc --noEmit -p tsconfig.core.json && tsc --noEmit -p .",
+    "test:app": "node tools/app-test/run.js",
+    "check": "npm run typecheck && npm run build && npm run test:app",
+    "cap:sync": "npm run build && cap sync",
+    "build:core:miniprogram": "esbuild packages/viewer-core/src/index.ts --bundle --format=cjs --target=es2018 --minify --legal-comments=none --outfile=apps/miniprogram/libs/viewer-core.js",
+    "test:contract": "node tools/contract-test/run.js"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.6.0",
     "@types/three": "0.170.0",
-    "esbuild": "0.24.0",
+    "esbuild": "0.28.2",
     "miniprogram-api-typings": "4.0.1",
-    "three": "0.170.0",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "vite": "8.3.5"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/ios": "8.6.0",
+    "three": "0.170.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

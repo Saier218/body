@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "lib": ["ES2018"], "types": [] },
+  "include": ["packages/viewer-core/**/*.ts"],
+  "exclude": ["node_modules"]
+}

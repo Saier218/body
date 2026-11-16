@@ -1,7 +1,7 @@
 /**
  * Platform-independent 3D anatomy viewer.
  * It only talks to the host through HostCanvas, so the same code runs in a WeChat
- * mini program, a browser page or (later) an app web view. No DOM, no wx.* in here.
+ * mini program, a browser page or an app web view. No DOM, no wx.* in here.
  */
 import {
   Box3,
@@ -249,6 +249,15 @@ export class Viewer {
   setKindVisible(kind: string, visible: boolean): void {
     if (visible) this.hiddenKinds.delete(kind); else this.hiddenKinds.add(kind);
     this.restyle();
+  }
+
+  /** call when the canvas changes size (rotation, window resize); sizes are in CSS pixels */
+  resize(width: number, height: number): void {
+    this.width = width;
+    this.height = height;
+    this.renderer.setSize(width, height, false);
+    this.camera.aspect = width / height;
+    this.invalidate();
   }
 
   stats(): ViewerStats {
