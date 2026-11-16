@@ -1,0 +1,103 @@
+/* 方向 A —— 临床冷静 / Clinical calm
+   深色、精确、仪器感；单一冷色强调；3D 模型是主角。
+   本文件是该方向全部颜色 / 间距 / 圆角 / 字号的唯一来源。 */
+:root {
+  /* 颜色：底与面 */
+  --c-bg: #0d1014;
+  --c-surface: #141920;
+  --c-surface-2: #1b222c;
+  --c-viewport-1: #1b212b;      /* 3D 视口渐变：中心 */
+  --c-viewport-2: #0d1014;      /* 3D 视口渐变：边缘 */
+  --c-grid: #1a2029;            /* 视口参考网格线 */
+  --c-line: #28313d;
+  --c-line-strong: #3d4959;
+  --c-scrim: rgba(13, 16, 20, 0.72);
+
+  /* 颜色：文字 */
+  --c-text: #e9edf2;
+  --c-text-2: #aab4c0;
+  --c-text-3: #8a96a6;
+
+  /* 颜色：强调（单一冷色） */
+  --c-accent: #86d3e8;          /* 填充、图标、描边 */
+  --c-accent-text: #86d3e8;     /* 作为文字使用时 */
+  --c-accent-ink: #06232c;      /* 压在强调色填充上的文字 */
+  --c-accent-soft: #10303a;     /* 强调色淡底 */
+
+  /* 颜色：主按钮 */
+  --c-btn-bg: transparent;
+  --c-btn-text: #86d3e8;
+  --c-btn-line: #86d3e8;
+
+  /* 颜色：就医警示块（全页唯一暖色） */
+  --c-danger-head-bg: #ff7d72;
+  --c-danger-head-text: #230806;
+  --c-danger-bg: #2a1215;
+  --c-danger-text: #ffd9d5;
+  --c-danger-line: #ff7d72;
+
+  /* 颜色：解剖图层色标（与模型材质对应） */
+  --c-layer-bone: #d9d2bf;
+  --c-layer-muscle: #b0473f;
+  --c-layer-fascia: #c9a77a;
+  --c-layer-pulley: #4f9fc9;
+
+  /* 颜色：角色标签 */
+  --c-role-prime-bg: #86d3e8;   --c-role-prime-text: #06232c;  --c-role-prime-line: #86d3e8;
+  --c-role-syn-bg: transparent; --c-role-syn-text: #86d3e8;    --c-role-syn-line: #86d3e8;
+  --c-role-stab-bg: transparent;--c-role-stab-text: #aab4c0;   --c-role-stab-line: #3d4959;
+
+  /* 字体 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  --font-label: var(--font-mono);   /* 小标签 / 数据用等宽，强化仪器感 */
+
+  /* 字号阶梯（紧凑） */
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;    /* 正文 */
+  --fs-lg: 16px;    /* 小节标题 */
+  --fs-xl: 20px;    /* 面板标题 */
+  --fs-2xl: 24px;   /* 页面标题 */
+  --lh-tight: 1.25;
+  --lh-body: 1.6;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 600;
+  --ls-label: 0.06em;
+
+  /* 间距（4 的倍数，偏密） */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --gutter: 16px;
+
+  /* 圆角（小，硬朗） */
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-sheet: 12px;
+  --r-pill: 4px;      /* 本方向不用胶囊形，芯片也是小圆角矩形 */
+
+  /* 描边与阴影：靠 1px 细线分层，不用阴影 */
+  --bw: 1px;
+  --shadow-card: none;
+  --shadow-sheet: none;
+
+  /* 图标 */
+  --icon: 20px;
+  --icon-stroke: 1.5;
+  --icon-cap: square;
+  --icon-join: miter;
+
+  /* 尺寸 */
+  --touch: 44px;
+  --topbar-h: 48px;
+  --tabbar-h: 56px;
+  --thumb: 104px;
+}

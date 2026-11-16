@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>视觉方向对比 · climb-anatomy</title>
+<style>
+  :root { --pg-bg: #e9e9e6; --pg-text: #1f2328; --pg-muted: #4a515a; --pg-frame: #111417; --pg-card: #ffffff; --pg-link: #0b4f6c; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px 24px 64px; background: var(--pg-bg); color: var(--pg-text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Segoe UI", Roboto, sans-serif; }
+  header, section { max-width: 920px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  h2 { font-size: 20px; margin: 48px 0 16px; }
+  p { margin: 0 0 8px; color: var(--pg-muted); }
+  .dirs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .dir { background: var(--pg-card); border-radius: 12px; padding: 16px 20px; }
+  .dir h3 { margin: 0 0 4px; font-size: 18px; color: var(--pg-text); }
+  .dir ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  a { color: var(--pg-link); display: inline-flex; align-items: center; min-height: 44px; }
+  .pair { display: grid; grid-template-columns: repeat(2, 410px); gap: 32px 60px; justify-content: center; }
+  figure { margin: 0; }
+  figcaption { font-size: 14px; color: var(--pg-muted); margin: 0 0 8px 12px; }
+  .phone { width: 410px; height: 864px; border: 10px solid var(--pg-frame); border-radius: 48px; overflow: hidden; background: var(--pg-frame); }
+  .phone iframe { width: 390px; height: 844px; border: 0; display: block; }
+  @media (max-width: 920px) { .pair, .dirs { grid-template-columns: 410px; justify-content: center; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>两个视觉方向，请选一个</h1>
+  <p>左边是方向 A「临床冷静」，右边是方向 B「岩馆暖调」。每个手机框里都是可以滚动、可以点的静态页面（390×844）。</p>
+  <p>页面里的文字是示例，不是正式医学内容。说明、对比度数据和我的建议见 <a href="README.md">README.md</a>。</p>
+  <div class="dirs">
+    <div class="dir">
+      <h3>A · 临床冷静 Clinical calm</h3>
+      <p>深色、细线、小圆角、信息密；3D 模型是主角。</p>
+      <ul><li><a href="a/body.html">身体 / 3D</a></li><li><a href="a/injury.html">损伤详情</a></li><li><a href="a/move.html">动作详情</a></li></ul>
+    </div>
+    <div class="dir">
+      <h3>B · 岩馆暖调 Chalk &amp; warm</h3>
+      <p>暖色纸感底、浮起的圆角卡片、字更大、留白多。</p>
+      <ul><li><a href="b/body.html">身体 / 3D</a></li><li><a href="b/injury.html">损伤详情</a></li><li><a href="b/move.html">动作详情</a></li></ul>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>1. 身体 / 3D 探索</h2>
+  <div class="pair">
+    <figure><figcaption>方向 A</figcaption><div class="phone"><iframe src="a/body.html" title="方向 A：身体页"></iframe></div></figure>
+    <figure><figcaption>方向 B</figcaption><div class="phone"><iframe src="b/body.html" title="方向 B：身体页"></iframe></div></figure>
+  </div>
+</section>
+<section>
+  <h2>2. 损伤详情：A2 滑车损伤（框内可滚动）</h2>
+  <div class="pair">
+    <figure><figcaption>方向 A</figcaption><div class="phone"><iframe src="a/injury.html" title="方向 A：损伤详情"></iframe></div></figure>
+    <figure><figcaption>方向 B</figcaption><div class="phone"><iframe src="b/injury.html" title="方向 B：损伤详情"></iframe></div></figure>
+  </div>
+</section>
+<section>
+  <h2>3. 动作详情：半握（可点「易伤部位」切换）</h2>
+  <div class="pair">
+    <figure><figcaption>方向 A</figcaption><div class="phone"><iframe src="a/move.html" title="方向 A：动作详情"></iframe></div></figure>
+    <figure><figcaption>方向 B</figcaption><div class="phone"><iframe src="b/move.html" title="方向 B：动作详情"></iframe></div></figure>
+  </div>
+</section>
+</body>
+</html>

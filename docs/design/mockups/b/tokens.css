@@ -1,0 +1,103 @@
+/* 方向 B —— 岩馆暖调 / Chalk & warm
+   浅色、镁粉纸感的暖底、更亲和；一个来自岩点的陶土橙强调色。
+   本文件是该方向全部颜色 / 间距 / 圆角 / 字号的唯一来源。 */
+:root {
+  /* 颜色：底与面 */
+  --c-bg: #f4ede1;
+  --c-surface: #fffcf6;
+  --c-surface-2: #ebe2d2;
+  --c-viewport-1: #d3c9b9;      /* 3D 视口渐变：中心（比骨骼色深，保证骨骼可辨） */
+  --c-viewport-2: #b3a794;      /* 3D 视口渐变：边缘 */
+  --c-grid: transparent;
+  --c-line: #dfd4c1;
+  --c-line-strong: #b9ab95;
+  --c-scrim: rgba(255, 252, 246, 0.92);
+
+  /* 颜色：文字 */
+  --c-text: #2a221d;
+  --c-text-2: #5a4f46;
+  --c-text-3: #6b5f55;
+
+  /* 颜色：强调（陶土橙） */
+  --c-accent: #c4501b;          /* 填充、图标 */
+  --c-accent-text: #a23c0c;     /* 作为文字使用时（更深以满足对比度） */
+  --c-accent-ink: #ffffff;      /* 压在强调色填充上的文字 */
+  --c-accent-soft: #f6dccb;     /* 强调色淡底 */
+
+  /* 颜色：主按钮（用墨色而不是橙色，避免与警示红混淆） */
+  --c-btn-bg: #2a221d;
+  --c-btn-text: #fffcf6;
+  --c-btn-line: #2a221d;
+
+  /* 颜色：就医警示块（整块实心深红） */
+  --c-danger-head-bg: #8f1226;
+  --c-danger-head-text: #ffffff;
+  --c-danger-bg: #8f1226;
+  --c-danger-text: #fff3f0;
+  --c-danger-line: #8f1226;
+
+  /* 颜色：解剖图层色标（与模型材质对应） */
+  --c-layer-bone: #e6dfcc;
+  --c-layer-muscle: #b0473f;
+  --c-layer-fascia: #c9a77a;
+  --c-layer-pulley: #4f9fc9;
+
+  /* 颜色：角色标签 */
+  --c-role-prime-bg: #c4501b;   --c-role-prime-text: #ffffff;  --c-role-prime-line: #c4501b;
+  --c-role-syn-bg: #f6dccb;     --c-role-syn-text: #a23c0c;    --c-role-syn-line: #f6dccb;
+  --c-role-stab-bg: #ebe2d2;    --c-role-stab-text: #5a4f46;   --c-role-stab-line: #ebe2d2;
+
+  /* 字体 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  --font-label: var(--font-sans);   /* 小标签也用无衬线，更口语 */
+
+  /* 字号阶梯（宽松，标题更大更重） */
+  --fs-2xs: 12px;
+  --fs-xs: 13px;
+  --fs-sm: 14px;
+  --fs-md: 16px;    /* 正文 */
+  --fs-lg: 18px;    /* 小节标题 */
+  --fs-xl: 24px;    /* 面板标题 */
+  --fs-2xl: 30px;   /* 页面标题 */
+  --lh-tight: 1.25;
+  --lh-body: 1.7;
+  --fw-regular: 400;
+  --fw-medium: 600;
+  --fw-bold: 700;
+  --ls-label: 0;
+
+  /* 间距（留白更多） */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 28px;
+  --gutter: 12px;     /* 卡片外边距；卡片内边距用 --sp-5 */
+
+  /* 圆角（大，柔和） */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-sheet: 28px;
+  --r-pill: 999px;
+
+  /* 描边与阴影：靠浮起的卡片分层，不用细线 */
+  --bw: 0px;
+  --shadow-card: 0 1px 2px rgba(74, 52, 30, 0.08), 0 6px 16px rgba(74, 52, 30, 0.07);
+  --shadow-sheet: 0 -2px 6px rgba(74, 52, 30, 0.06), 0 10px 30px rgba(74, 52, 30, 0.16);
+
+  /* 图标 */
+  --icon: 22px;
+  --icon-stroke: 2.1;
+  --icon-cap: round;
+  --icon-join: round;
+
+  /* 尺寸 */
+  --touch: 44px;
+  --topbar-h: 56px;
+  --tabbar-h: 64px;
+  --thumb: 116px;
+}
