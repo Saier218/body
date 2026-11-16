@@ -32,8 +32,6 @@ export interface HostCanvas {
 
 export interface CatalogEntry {
   id: string;
-  name_en: string;
-  name_zh: string | null;
   kind: string;
   group: string;
 }

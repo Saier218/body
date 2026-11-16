@@ -3,20 +3,25 @@
   "private": true,
   "scripts": {
     "sync:models": "node tools/sync-models.mjs",
-    "dev": "npm run sync:models && vite apps/app --host",
-    "build": "npm run sync:models && vite build apps/app",
+    "dev": "npm run sync:models && npm run content:build && vite apps/app --host",
+    "build": "npm run sync:models && npm run content:build && vite build apps/app",
     "typecheck": "tsc --noEmit -p tsconfig.core.json && tsc --noEmit -p .",
     "test:app": "node tools/app-test/run.js",
-    "check": "npm run typecheck && npm run build && npm run test:app",
+    "check": "npm run typecheck && npm run test:content && npm run build && npm run test:app",
     "cap:sync": "npm run build && cap sync",
     "build:core:miniprogram": "esbuild packages/viewer-core/src/index.ts --bundle --format=cjs --target=es2018 --minify --legal-comments=none --outfile=apps/miniprogram/libs/viewer-core.js",
-    "test:contract": "node tools/contract-test/run.js"
+    "test:contract": "node tools/contract-test/run.js",
+    "content:validate": "node tools/content/validate.mjs",
+    "content:build": "node tools/content/build.mjs",
+    "test:content": "node --test tools/content/validate.test.mjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.0",
     "@types/three": "0.170.0",
+    "ajv": "8.20.0",
     "esbuild": "0.28.2",
     "miniprogram-api-typings": "4.0.1",
+    "playwright": "1.63.0",
     "typescript": "5.6.3",
     "vite": "8.3.5"
   },

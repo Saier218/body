@@ -9,3 +9,4 @@ __pycache__/
 # 构建产物
 dist/
 apps/app/public/models/
+apps/app/public/content/

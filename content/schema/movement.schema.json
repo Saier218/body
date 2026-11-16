@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "movement.schema.json",
+  "type": "object",
+  "required": ["id", "sport", "category", "name", "summary", "status", "structures", "injuries"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "sport": { "$ref": "common.schema.json#/$defs/id" },
+    "category": { "$ref": "common.schema.json#/$defs/id" },
+    "name": { "$ref": "common.schema.json#/$defs/text" },
+    "aliases": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/text" } },
+    "summary": { "$ref": "common.schema.json#/$defs/sourcedText" },
+    "status": { "$ref": "common.schema.json#/$defs/status" },
+    "reviewed_at": { "$ref": "common.schema.json#/$defs/date" },
+    "structures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "sources"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "role": { "enum": ["prime-mover", "synergist", "stabilizer", "loaded-passive"], "description": "loaded-passive is for non-contractile structures such as pulleys and ligaments." },
+          "note": { "$ref": "common.schema.json#/$defs/text" },
+          "sources": { "$ref": "common.schema.json#/$defs/sourceRefs" }
+        }
+      }
+    },
+    "injuries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "note", "sources"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "note": { "$ref": "common.schema.json#/$defs/text", "description": "Qualitative description of why the movement is associated with the injury. No scores." },
+          "sources": { "$ref": "common.schema.json#/$defs/sourceRefs" }
+        }
+      }
+    }
+  }
+}

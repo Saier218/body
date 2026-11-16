@@ -33,7 +33,7 @@ server.listen(0, '127.0.0.1', async () => {
       await page.waitForTimeout(120);
       if ((await title()) !== '点一下任意结构') { hit = [fx, fy]; break; }
     } if (hit) break; }
-    check('tapping a structure shows its name', !!hit, await title());
+    check('tapping a structure shows its Chinese name', !!hit && /[\u4e00-\u9fff]/.test(await title()) && !/待补/.test(await title()), await title());
     check('region line is shown', /所在分区/.test(await page.textContent('#subtitle')), await page.textContent('#subtitle'));
     check('back button appears after focusing a region', await page.isVisible('#back'));
     await page.waitForTimeout(500);

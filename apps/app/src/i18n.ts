@@ -10,7 +10,6 @@ const TEXT = {
   lang: { zh: 'English', en: '中文' },
   diagnostics: { zh: '诊断信息', en: 'Diagnostics' },
   group: { zh: '所在分区', en: 'Region' },
-  noZh: { zh: '（中文名待补）', en: '' },
   incidence: { zh: '文献出现率', en: 'Reported incidence' },
   err_webgl2: { zh: '此设备不支持 WebGL2，无法显示 3D 模型。', en: 'This device does not support WebGL2, so the 3D model cannot be shown.' },
   err_load: { zh: '模型加载失败', en: 'The model failed to load' },

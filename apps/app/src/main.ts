@@ -2,7 +2,15 @@ import { createViewer, type CatalogEntry, type Viewer } from '../../../packages/
 import { hostCanvas } from './host';
 import { t, tDynamic, type Lang } from './i18n';
 
-interface Entry extends CatalogEntry { incidence?: number }
+interface Structure {
+  id: string;
+  name: { zh: string; en: string; la?: string };
+  incidence?: number;
+}
+interface ContentBundle {
+  structures: Record<string, Structure>;
+  meshIndex: Record<string, string>;
+}
 
 const KINDS = ['bone', 'muscle', 'fascia', 'pulley'];
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -14,7 +22,8 @@ const el = {
 
 let lang: Lang = navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
 let viewer: Viewer | null = null;
-let catalog: Entry[] = [];
+let catalog: CatalogEntry[] = [];
+let content: ContentBundle = { structures: {}, meshIndex: {} };
 let selectedId: string | null = null;
 let focused: string | null = null;
 let status: 'loading' | 'ready' | 'error' = 'loading';
@@ -36,9 +45,12 @@ function render(): void {
     el.title.textContent = t('ready', lang);
     el.subtitle.textContent = '';
   } else {
-    el.title.textContent = lang === 'zh' ? (e.name_zh ?? `${e.name_en} ${t('noZh', lang)}`) : e.name_en;
-    let sub = `${t('group', lang)}: ${tDynamic('group', e.group, lang)}`;
-    if (typeof e.incidence === 'number') sub += `  ·  ${t('incidence', lang)} ${Math.round(e.incidence * 100)}%`;
+    // Names come from the content data, never from the model file: the mesh id is the only link.
+    const st = content.structures[content.meshIndex[e.id]];
+    el.title.textContent = st ? st.name[lang] : e.id;
+    let sub = [lang === 'zh' ? st?.name.en : undefined, st?.name.la].filter(Boolean).join(' · ');
+    sub += `${sub ? '\n' : ''}${t('group', lang)}: ${tDynamic('group', e.group, lang)}`;
+    if (typeof st?.incidence === 'number') sub += `  ·  ${t('incidence', lang)} ${Math.round(st.incidence * 100)}%`;
     el.subtitle.textContent = sub;
   }
   el.layers.replaceChildren(...KINDS.map((kind) => {
@@ -124,10 +136,12 @@ async function start(): Promise<void> {
   bindPointers(viewer);
   new ResizeObserver(() => { const s = canvasSize(); viewer?.resize(s.width, s.height); }).observe(canvas);
   try {
-    const [glb, cat] = await Promise.all([
+    const [glb, cat, bundle] = await Promise.all([
       fetch('./models/hand_right.glb').then((r) => { if (!r.ok) throw new Error('model HTTP ' + r.status); return r.arrayBuffer(); }),
-      fetch('./models/hand_right.catalog.json').then((r) => { if (!r.ok) throw new Error('catalog HTTP ' + r.status); return r.json() as Promise<Entry[]>; }),
+      fetch('./models/hand_right.catalog.json').then((r) => { if (!r.ok) throw new Error('catalog HTTP ' + r.status); return r.json() as Promise<CatalogEntry[]>; }),
+      fetch('./content/bundle.json').then((r) => { if (!r.ok) throw new Error('content HTTP ' + r.status); return r.json() as Promise<ContentBundle>; }),
     ]);
+    content = bundle;
     const fetched = performance.now();
     catalog = cat;
     viewer.load(glb, catalog);

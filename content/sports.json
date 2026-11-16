@@ -1,0 +1,13 @@
+[
+  {
+    "id": "climbing",
+    "name": { "zh": "攀岩", "en": "Climbing" },
+    "categories": [
+      { "id": "grip", "name": { "zh": "抓握方式", "en": "Grip types" } },
+      { "id": "body-position", "name": { "zh": "身体姿态", "en": "Body positions" } },
+      { "id": "dynamic", "name": { "zh": "动态动作", "en": "Dynamic moves" } },
+      { "id": "fall", "name": { "zh": "坠落与落地", "en": "Falls and landings" } },
+      { "id": "training", "name": { "zh": "专项训练", "en": "Training" } }
+    ]
+  }
+]

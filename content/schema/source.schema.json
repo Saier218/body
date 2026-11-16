@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "source.schema.json",
+  "type": "object",
+  "required": ["id", "citation", "year", "type", "evidence_grade", "accessed", "reuse"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "citation": { "type": "string", "minLength": 10 },
+    "year": { "type": "integer", "minimum": 1900, "maximum": 2100 },
+    "type": { "enum": ["systematic-review", "guideline", "review", "original", "textbook", "expert"] },
+    "evidence_grade": { "enum": ["A", "B", "C"], "description": "A: systematic review, guideline or consensus. B: peer-reviewed original study or authoritative textbook. C: published material from a professional body or practising expert." },
+    "pmid": { "type": "string", "pattern": "^\\d+$" },
+    "pmcid": { "type": "string", "pattern": "^PMC\\d+$" },
+    "doi": { "type": "string", "pattern": "^10\\." },
+    "url": { "type": "string", "pattern": "^https://" },
+    "accessed": { "$ref": "common.schema.json#/$defs/date" },
+    "read": { "enum": ["full-text", "abstract"], "description": "How much of the source was actually read when the content was written." },
+    "reuse": { "type": "string", "minLength": 3, "description": "What we took from it. Normally 'facts only'; text or figures may be reused only under an open licence recorded in ASSETS.md." }
+  },
+  "anyOf": [{ "required": ["pmid"] }, { "required": ["doi"] }, { "required": ["url"] }]
+}
