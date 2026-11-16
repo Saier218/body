@@ -16,10 +16,16 @@
         "la": { "type": "string", "minLength": 1, "description": "Latin (Terminologia Anatomica) name where one exists." }
       }
     },
-    "names_status": { "enum": ["unverified", "verified"], "description": "verified = checked against a terminology standard, recorded in sources." },
+    "names_status": {
+      "enum": ["unverified", "verified"],
+      "description": "verified = checked against a terminology standard, recorded in sources."
+    },
     "kind": { "enum": ["bone", "muscle", "fascia", "pulley", "tendon", "ligament", "cartilage", "nerve", "vessel", "other"] },
     "region": { "enum": ["thumb", "index", "middle", "ring", "little", "palm", "wrist", "forearm", "elbow", "upper-arm", "shoulder"] },
-    "part_of": { "$ref": "common.schema.json#/$defs/id", "description": "Parent concept, e.g. a muscle for one of its heads. Need not have meshes of its own." },
+    "part_of": {
+      "$ref": "common.schema.json#/$defs/id",
+      "description": "Parent concept, e.g. a muscle for one of its heads. Need not have meshes of its own."
+    },
     "meshes": {
       "type": "array",
       "minItems": 1,
@@ -31,7 +37,15 @@
       }
     },
     "pulley_type": { "enum": ["annular", "cruciform", "oblique"] },
-    "incidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Share of specimens in which the structure was present, from the source recorded in the modelling parameters." },
-    "model_origin": { "enum": ["generated"], "description": "Present when the geometry was built by us rather than taken from the base model." }
+    "incidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Share of specimens in which the structure was present, from the source recorded in the modelling parameters."
+    },
+    "model_origin": {
+      "enum": ["generated"],
+      "description": "Present when the geometry was built by us rather than taken from the base model."
+    }
   }
 }

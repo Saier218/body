@@ -21,7 +21,10 @@
         "additionalProperties": false,
         "properties": {
           "id": { "$ref": "common.schema.json#/$defs/id" },
-          "role": { "enum": ["prime-mover", "synergist", "stabilizer", "loaded-passive"], "description": "loaded-passive is for non-contractile structures such as pulleys and ligaments." },
+          "role": {
+            "enum": ["prime-mover", "synergist", "stabilizer", "loaded-passive"],
+            "description": "loaded-passive is for non-contractile structures such as pulleys and ligaments."
+          },
           "note": { "$ref": "common.schema.json#/$defs/text" },
           "sources": { "$ref": "common.schema.json#/$defs/sourceRefs" }
         }
@@ -35,7 +38,10 @@
         "additionalProperties": false,
         "properties": {
           "id": { "$ref": "common.schema.json#/$defs/id" },
-          "note": { "$ref": "common.schema.json#/$defs/text", "description": "Qualitative description of why the movement is associated with the injury. No scores." },
+          "note": {
+            "$ref": "common.schema.json#/$defs/text",
+            "description": "Qualitative description of why the movement is associated with the injury. No scores."
+          },
           "sources": { "$ref": "common.schema.json#/$defs/sourceRefs" }
         }
       }

@@ -9,4 +9,6 @@ if (errors.length) {
   process.exit(1);
 }
 const count = (s) => content.injuries.concat(content.movements).filter((x) => x.status === s).length;
-console.log(`content ok: ${content.structures.length} structures, ${content.movements.length} movements, ${content.injuries.length} injuries, ${content.sources.length} sources (draft ${count('draft')}, sourced ${count('sourced')}, expert-reviewed ${count('expert-reviewed')})`);
+console.log(
+  `content ok: ${content.structures.length} structures, ${content.movements.length} movements, ${content.injuries.length} injuries, ${content.sources.length} sources (draft ${count('draft')}, sourced ${count('sourced')}, expert-reviewed ${count('expert-reviewed')})`,
+);

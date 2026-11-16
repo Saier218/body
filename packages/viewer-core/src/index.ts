@@ -115,16 +115,27 @@ export class Viewer {
     this.canvas = opts.canvas;
     this.width = opts.width;
     this.height = opts.height;
-    const gl = opts.canvas.getContext('webgl2', { antialias: true, alpha: false, powerPreference: 'high-performance' }) as { VERSION: number; getParameter(p: number): unknown } | null;
+    const gl = opts.canvas.getContext('webgl2', { antialias: true, alpha: false, powerPreference: 'high-performance' }) as {
+      VERSION: number;
+      getParameter(p: number): unknown;
+    } | null;
     if (!gl) throw new Error('WEBGL2_UNAVAILABLE');
     this.glVersion = String(gl.getParameter(gl.VERSION));
     const host = opts.canvas;
     // three.js expects a few DOM members on the canvas; give it inert ones.
     const facade = {
-      get width() { return host.width; },
-      set width(v: number) { host.width = v; },
-      get height() { return host.height; },
-      set height(v: number) { host.height = v; },
+      get width() {
+        return host.width;
+      },
+      set width(v: number) {
+        host.width = v;
+      },
+      get height() {
+        return host.height;
+      },
+      set height(v: number) {
+        host.height = v;
+      },
       style: {},
       addEventListener() {},
       removeEventListener() {},
@@ -222,7 +233,9 @@ export class Viewer {
     this.updateCamera();
     this.raycaster.setFromCamera(new Vector2((x / this.width) * 2 - 1, -(y / this.height) * 2 + 1), this.camera);
     const meshes: Mesh[] = [];
-    this.items.forEach((it) => { if (it.mesh.visible) meshes.push(it.mesh); });
+    this.items.forEach((it) => {
+      if (it.mesh.visible) meshes.push(it.mesh);
+    });
     const hit = this.raycaster.intersectObjects(meshes, false)[0];
     return hit ? hit.object.name : null;
   }
@@ -240,12 +253,19 @@ export class Viewer {
   focusGroup(group: string | null): void {
     this.focused = group;
     const b = this.boundsOf((e) => group === null || e.group === group);
-    this.goal = { target: b.center, radius: this.fitRadius(b.radius), from: this.target.clone(), fromRadius: this.radius, start: Date.now() };
+    this.goal = {
+      target: b.center,
+      radius: this.fitRadius(b.radius),
+      from: this.target.clone(),
+      fromRadius: this.radius,
+      start: Date.now(),
+    };
     this.restyle();
   }
 
   setKindVisible(kind: string, visible: boolean): void {
-    if (visible) this.hiddenKinds.delete(kind); else this.hiddenKinds.add(kind);
+    if (visible) this.hiddenKinds.delete(kind);
+    else this.hiddenKinds.add(kind);
     this.restyle();
   }
 
@@ -260,7 +280,9 @@ export class Viewer {
 
   stats(): ViewerStats {
     let triangles = 0;
-    this.items.forEach((it) => { triangles += (it.mesh.geometry.index?.count ?? 0) / 3; });
+    this.items.forEach((it) => {
+      triangles += (it.mesh.geometry.index?.count ?? 0) / 3;
+    });
     return { glVersion: this.glVersion, meshes: this.items.size, triangles, drawCalls: this.renderer.info.render.calls };
   }
 
@@ -273,7 +295,10 @@ export class Viewer {
   dispose(): void {
     this.disposed = true;
     if (this.frame) this.canvas.cancelAnimationFrame(this.frame);
-    this.items.forEach((it) => { it.mesh.geometry.dispose(); it.mesh.material.dispose(); });
+    this.items.forEach((it) => {
+      it.mesh.geometry.dispose();
+      it.mesh.material.dispose();
+    });
     this.renderer.dispose();
   }
 
@@ -336,7 +361,8 @@ export class Viewer {
       const e = 1 - Math.pow(1 - t, 3);
       this.target.lerpVectors(this.goal.from, this.goal.target, e);
       this.radius = this.goal.fromRadius + (this.goal.radius - this.goal.fromRadius) * e;
-      if (t >= 1) this.goal = null; else again = true;
+      if (t >= 1) this.goal = null;
+      else again = true;
     }
     if (this.bench) {
       this.theta += 0.02;

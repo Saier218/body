@@ -1,0 +1,11 @@
+dist
+node_modules
+android
+ios
+apps/miniprogram
+apps/app/public
+models
+data
+docs/design/mockups
+package-lock.json
+content/structures.json

@@ -16,8 +16,15 @@ const KINDS = ['bone', 'muscle', 'fascia', 'pulley'];
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const canvas = $<HTMLCanvasElement>('gl');
 const el = {
-  title: $('title'), subtitle: $('subtitle'), layers: $('layers'), back: $<HTMLButtonElement>('back'),
-  bench: $<HTMLButtonElement>('bench'), lang: $<HTMLButtonElement>('lang'), diagTitle: $('diag-title'), diag: $('diag'), credit: $('credit'),
+  title: $('title'),
+  subtitle: $('subtitle'),
+  layers: $('layers'),
+  back: $<HTMLButtonElement>('back'),
+  bench: $<HTMLButtonElement>('bench'),
+  lang: $<HTMLButtonElement>('lang'),
+  diagTitle: $('diag-title'),
+  diag: $('diag'),
+  credit: $('credit'),
 };
 
 let lang: Lang = navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
@@ -53,14 +60,16 @@ function render(): void {
     if (typeof st?.incidence === 'number') sub += `  ·  ${t('incidence', lang)} ${Math.round(st.incidence * 100)}%`;
     el.subtitle.textContent = sub;
   }
-  el.layers.replaceChildren(...KINDS.map((kind) => {
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.dataset.kind = kind;
-    b.setAttribute('aria-pressed', String(!hidden.has(kind)));
-    b.textContent = tDynamic('kind', kind, lang);
-    return b;
-  }));
+  el.layers.replaceChildren(
+    ...KINDS.map((kind) => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.dataset.kind = kind;
+      b.setAttribute('aria-pressed', String(!hidden.has(kind)));
+      b.textContent = tDynamic('kind', kind, lang);
+      return b;
+    }),
+  );
   el.back.textContent = t('back', lang);
   el.back.hidden = focused === null;
   el.bench.textContent = t(benchmarking ? 'benchmarking' : 'benchmark', lang);
@@ -134,20 +143,35 @@ async function start(): Promise<void> {
   }
   viewer.onTap = onPick;
   bindPointers(viewer);
-  new ResizeObserver(() => { const s = canvasSize(); viewer?.resize(s.width, s.height); }).observe(canvas);
+  new ResizeObserver(() => {
+    const s = canvasSize();
+    viewer?.resize(s.width, s.height);
+  }).observe(canvas);
   try {
     const [glb, cat, bundle] = await Promise.all([
-      fetch('./models/hand_right.glb').then((r) => { if (!r.ok) throw new Error('model HTTP ' + r.status); return r.arrayBuffer(); }),
-      fetch('./models/hand_right.catalog.json').then((r) => { if (!r.ok) throw new Error('catalog HTTP ' + r.status); return r.json() as Promise<CatalogEntry[]>; }),
-      fetch('./content/bundle.json').then((r) => { if (!r.ok) throw new Error('content HTTP ' + r.status); return r.json() as Promise<ContentBundle>; }),
+      fetch('./models/hand_right.glb').then((r) => {
+        if (!r.ok) throw new Error('model HTTP ' + r.status);
+        return r.arrayBuffer();
+      }),
+      fetch('./models/hand_right.catalog.json').then((r) => {
+        if (!r.ok) throw new Error('catalog HTTP ' + r.status);
+        return r.json() as Promise<CatalogEntry[]>;
+      }),
+      fetch('./content/bundle.json').then((r) => {
+        if (!r.ok) throw new Error('content HTTP ' + r.status);
+        return r.json() as Promise<ContentBundle>;
+      }),
     ]);
     content = bundle;
     const fetched = performance.now();
     catalog = cat;
     viewer.load(glb, catalog);
     const s = viewer.stats();
-    facts.push(`GL ${s.glVersion}`, `${s.meshes} meshes, ${s.triangles} triangles`,
-      `fetch ${Math.round(fetched - started)} ms, build ${Math.round(performance.now() - fetched)} ms`);
+    facts.push(
+      `GL ${s.glVersion}`,
+      `${s.meshes} meshes, ${s.triangles} triangles`,
+      `fetch ${Math.round(fetched - started)} ms, build ${Math.round(performance.now() - fetched)} ms`,
+    );
     status = 'ready';
     render();
   } catch (e) {
@@ -158,7 +182,8 @@ async function start(): Promise<void> {
 el.layers.addEventListener('click', (ev) => {
   const kind = (ev.target as HTMLElement).closest<HTMLElement>('[data-kind]')?.dataset.kind;
   if (!kind) return;
-  if (hidden.has(kind)) hidden.delete(kind); else hidden.add(kind);
+  if (hidden.has(kind)) hidden.delete(kind);
+  else hidden.add(kind);
   viewer?.setKindVisible(kind, !hidden.has(kind));
   render();
 });
@@ -169,7 +194,10 @@ el.back.addEventListener('click', () => {
   viewer?.focusGroup(null);
   render();
 });
-el.lang.addEventListener('click', () => { lang = lang === 'zh' ? 'en' : 'zh'; render(); });
+el.lang.addEventListener('click', () => {
+  lang = lang === 'zh' ? 'en' : 'zh';
+  render();
+});
 el.bench.addEventListener('click', () => {
   if (!viewer || benchmarking) return;
   benchmarking = true;

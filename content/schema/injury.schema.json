@@ -2,7 +2,21 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "injury.schema.json",
   "type": "object",
-  "required": ["id", "name", "sports", "structures", "status", "overview", "mechanism", "reported_signs", "red_flags", "general_principles", "prevention", "uncertainty", "disclaimer"],
+  "required": [
+    "id",
+    "name",
+    "sports",
+    "structures",
+    "status",
+    "overview",
+    "mechanism",
+    "reported_signs",
+    "red_flags",
+    "general_principles",
+    "prevention",
+    "uncertainty",
+    "disclaimer"
+  ],
   "additionalProperties": false,
   "properties": {
     "id": { "$ref": "common.schema.json#/$defs/id" },
@@ -24,8 +38,18 @@
     "reviewed_by": { "type": "string", "description": "Name and credentials of the professional reviewer; required for expert-reviewed." },
     "overview": { "$ref": "common.schema.json#/$defs/sourcedText" },
     "mechanism": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/sourcedText" } },
-    "reported_signs": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/sourcedText" }, "description": "Signs as described in the literature. Never phrased as a way to self-assess." },
-    "red_flags": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/sourcedText" }, "description": "Situations in which the reader should be seen in person promptly." },
+    "reported_signs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "common.schema.json#/$defs/sourcedText" },
+      "description": "Signs as described in the literature. Never phrased as a way to self-assess."
+    },
+    "red_flags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "common.schema.json#/$defs/sourcedText" },
+      "description": "Situations in which the reader should be seen in person promptly."
+    },
     "general_principles": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/sourcedText" } },
     "grading": {
       "type": "object",
@@ -43,7 +67,10 @@
             "properties": {
               "grade": { "type": "string", "minLength": 1 },
               "definition": { "$ref": "common.schema.json#/$defs/text" },
-              "reference_course": { "$ref": "common.schema.json#/$defs/text", "description": "What the cited source reports for this grade (ranges, not promises)." },
+              "reference_course": {
+                "$ref": "common.schema.json#/$defs/text",
+                "description": "What the cited source reports for this grade (ranges, not promises)."
+              },
               "sources": { "$ref": "common.schema.json#/$defs/sourceRefs" }
             }
           }
@@ -51,7 +78,12 @@
       }
     },
     "prevention": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/sourcedText" } },
-    "uncertainty": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/sourcedText" }, "description": "Where the evidence is weak, disputed or highly variable." },
+    "uncertainty": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "common.schema.json#/$defs/sourcedText" },
+      "description": "Where the evidence is weak, disputed or highly variable."
+    },
     "disclaimer": { "enum": ["general"], "description": "Key of the disclaimer text shown with the entry." }
   }
 }

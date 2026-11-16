@@ -57,7 +57,14 @@ export function parseGlb(buffer: ArrayBuffer): GlbMesh[] {
     if (acc.type !== expectType || bv.byteStride) throw new Error('GLB: unsupported accessor layout');
     const offset = binStart + (bv.byteOffset || 0) + (acc.byteOffset || 0);
     const n = acc.count * (expectType === 'VEC3' ? 3 : 1);
-    const Ctor = acc.componentType === 5126 ? Float32Array : acc.componentType === 5123 ? Uint16Array : acc.componentType === 5125 ? Uint32Array : null;
+    const Ctor =
+      acc.componentType === 5126
+        ? Float32Array
+        : acc.componentType === 5123
+          ? Uint16Array
+          : acc.componentType === 5125
+            ? Uint32Array
+            : null;
     if (!Ctor) throw new Error('GLB: unsupported component type ' + acc.componentType);
     if (offset % Ctor.BYTES_PER_ELEMENT === 0) return new Ctor(buffer, offset, n);
     return new Ctor(buffer.slice(offset, offset + n * Ctor.BYTES_PER_ELEMENT));

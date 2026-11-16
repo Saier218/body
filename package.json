@@ -7,22 +7,30 @@
     "build": "npm run sync:models && npm run content:build && vite build apps/app",
     "typecheck": "tsc --noEmit -p tsconfig.core.json && tsc --noEmit -p .",
     "test:app": "node tools/app-test/run.js",
-    "check": "npm run typecheck && npm run test:content && npm run build && npm run test:app",
+    "check": "npm run lint && npm run typecheck && npm run licenses && npm run test:content && npm run build && npm run budget && npm run test:app",
     "cap:sync": "npm run build && cap sync",
     "build:core:miniprogram": "esbuild packages/viewer-core/src/index.ts --bundle --format=cjs --target=es2018 --minify --legal-comments=none --outfile=apps/miniprogram/libs/viewer-core.js",
     "test:contract": "node tools/contract-test/run.js",
     "content:validate": "node tools/content/validate.mjs",
     "content:build": "node tools/content/build.mjs",
-    "test:content": "node --test tools/content/validate.test.mjs"
+    "test:content": "node --test tools/content/validate.test.mjs",
+    "lint": "eslint . && prettier --check \"apps/app/**/*.{ts,css,html}\" \"packages/**/*.ts\" \"tools/**/*.{js,mjs}\"",
+    "format": "prettier --write \"apps/app/**/*.{ts,css,html}\" \"packages/**/*.ts\" \"tools/**/*.{js,mjs}\"",
+    "licenses": "node tools/license-check.mjs",
+    "budget": "node tools/budget-check.mjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.0",
     "@types/three": "0.170.0",
     "ajv": "8.20.0",
     "esbuild": "0.28.2",
+    "eslint": "10.14.0",
+    "globals": "17.13.0",
     "miniprogram-api-typings": "4.0.1",
     "playwright": "1.63.0",
+    "prettier": "3.9.10",
     "typescript": "5.6.3",
+    "typescript-eslint": "8.72.1",
     "vite": "8.3.5"
   },
   "dependencies": {

@@ -7,11 +7,25 @@ import { fileURLToPath } from 'node:url';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
-const readDir = (dir) => (existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.json')).sort().map((f) => ({ file: f, data: readJson(join(dir, f)) })) : []);
+const readDir = (dir) =>
+  existsSync(dir)
+    ? readdirSync(dir)
+        .filter((f) => f.endsWith('.json'))
+        .sort()
+        .map((f) => ({ file: f, data: readJson(join(dir, f)) }))
+    : [];
 
 /** Words the product must not use (CLAUDE.md 3.1): we describe, we never assess or advise an individual. */
 export const BANNED_ZH = ['诊断', '确诊', '治疗', '治愈', '疗效', '处方', '用药剂量', '你得了', '无需就医'];
-export const BANNED_EN = [/\bdiagnos/i, /\btreat(?!ise)/i, /\bcure[ds]?\b/i, /\bprescri/i, /\bdosage\b/i, /\byou have (a|an|the)\b/i, /\bno need to see\b/i];
+export const BANNED_EN = [
+  /\bdiagnos/i,
+  /\btreat(?!ise)/i,
+  /\bcure[ds]?\b/i,
+  /\bprescri/i,
+  /\bdosage\b/i,
+  /\byou have (a|an|the)\b/i,
+  /\bno need to see\b/i,
+];
 
 export function loadContent(root = ROOT) {
   const c = join(root, 'content');
@@ -26,7 +40,9 @@ export function loadContent(root = ROOT) {
 
 export function loadModelCatalogs(root = ROOT) {
   const dir = join(root, 'models/generated');
-  return readdirSync(dir).filter((f) => f.endsWith('.catalog.json')).flatMap((f) => readJson(join(dir, f)));
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.catalog.json'))
+    .flatMap((f) => readJson(join(dir, f)));
 }
 
 function compileSchemas(root) {
@@ -38,7 +54,10 @@ function compileSchemas(root) {
 
 /** Every user-facing string in an entry, with a path for error messages. */
 function* texts(node, path) {
-  if (Array.isArray(node)) { for (let i = 0; i < node.length; i++) yield* texts(node[i], `${path}[${i}]`); return; }
+  if (Array.isArray(node)) {
+    for (let i = 0; i < node.length; i++) yield* texts(node[i], `${path}[${i}]`);
+    return;
+  }
   if (node && typeof node === 'object') {
     if (typeof node.zh === 'string' && typeof node.en === 'string') yield { path, zh: node.zh, en: node.en };
     for (const [k, v] of Object.entries(node)) if (k !== 'zh' && k !== 'en') yield* texts(v, `${path}.${k}`);
@@ -47,7 +66,10 @@ function* texts(node, path) {
 
 /** Every {sources: [...]} block in an entry. */
 function* sourced(node, path) {
-  if (Array.isArray(node)) { for (let i = 0; i < node.length; i++) yield* sourced(node[i], `${path}[${i}]`); return; }
+  if (Array.isArray(node)) {
+    for (let i = 0; i < node.length; i++) yield* sourced(node[i], `${path}[${i}]`);
+    return;
+  }
   if (node && typeof node === 'object') {
     if (Array.isArray(node.sources)) yield { path, sources: node.sources };
     for (const [k, v] of Object.entries(node)) if (k !== 'sources') yield* sourced(v, `${path}.${k}`);
@@ -77,25 +99,32 @@ export function validate(content, modelCatalog, root = ROOT) {
 
   // Model <-> content: each mesh in the shipped model belongs to exactly one structure, and every listed mesh exists.
   const meshOwner = new Map();
-  for (const s of content.structures) for (const m of s.meshes || []) {
-    if (meshOwner.has(m.id)) errors.push(`structure "${s.id}": mesh ${m.id} is already owned by "${meshOwner.get(m.id)}"`);
-    meshOwner.set(m.id, s.id);
-  }
+  for (const s of content.structures)
+    for (const m of s.meshes || []) {
+      if (meshOwner.has(m.id)) errors.push(`structure "${s.id}": mesh ${m.id} is already owned by "${meshOwner.get(m.id)}"`);
+      meshOwner.set(m.id, s.id);
+    }
   const modelIds = new Set(modelCatalog.map((m) => m.id));
   for (const id of modelIds) if (!meshOwner.has(id)) errors.push(`model mesh ${id} has no structure entry (it would show without a name)`);
   for (const [id, owner] of meshOwner) if (!modelIds.has(id)) errors.push(`structure "${owner}": mesh ${id} is not in any model catalog`);
   for (const s of content.structures) if (s.part_of && s.part_of === s.id) errors.push(`structure "${s.id}": part_of points to itself`);
 
   const categories = new Map(content.sports.map((s) => [s.id, new Set((s.categories || []).map((c) => c.id))]));
-  const refs = (label, ids, known, what) => { for (const id of ids) if (!known.has(id)) errors.push(`${label}: unknown ${what} "${id}"`); };
+  const refs = (label, ids, known, what) => {
+    for (const id of ids) if (!known.has(id)) errors.push(`${label}: unknown ${what} "${id}"`);
+  };
 
-  for (const [kind, list] of [['injury', content.injuries], ['movement', content.movements]]) {
+  for (const [kind, list] of [
+    ['injury', content.injuries],
+    ['movement', content.movements],
+  ]) {
     for (const item of list) {
       const label = `${kind} "${item.id}"`;
       for (const b of sourced(item, '')) {
         refs(`${label}${b.path}`, b.sources, sourceIds, 'source');
         // Anything beyond a draft must be traceable, block by block.
-        if (item.status !== 'draft' && b.sources.length === 0) errors.push(`${label}${b.path}: status "${item.status}" requires at least one source`);
+        if (item.status !== 'draft' && b.sources.length === 0)
+          errors.push(`${label}${b.path}: status "${item.status}" requires at least one source`);
       }
       if (item.status !== 'draft' && !item.reviewed_at) errors.push(`${label}: status "${item.status}" requires reviewed_at`);
       if (item.status === 'expert-reviewed' && !item.reviewed_by) errors.push(`${label}: expert-reviewed requires reviewed_by`);
@@ -103,7 +132,12 @@ export function validate(content, modelCatalog, root = ROOT) {
         for (const w of BANNED_ZH) if (t.zh.includes(w)) errors.push(`${label}${t.path}.zh: contains banned wording "${w}"`);
         for (const re of BANNED_EN) if (re.test(t.en)) errors.push(`${label}${t.path}.en: contains banned wording ${re}`);
       }
-      refs(label, (item.structures || []).map((s) => s.id), structureIds, 'structure');
+      refs(
+        label,
+        (item.structures || []).map((s) => s.id),
+        structureIds,
+        'structure',
+      );
     }
   }
   for (const i of content.injuries) refs(`injury "${i.id}"`, i.sports || [], sportIds, 'sport');
@@ -111,7 +145,12 @@ export function validate(content, modelCatalog, root = ROOT) {
     const label = `movement "${m.id}"`;
     if (!sportIds.has(m.sport)) errors.push(`${label}: unknown sport "${m.sport}"`);
     else if (!categories.get(m.sport).has(m.category)) errors.push(`${label}: unknown category "${m.category}" for sport "${m.sport}"`);
-    refs(label, (m.injuries || []).map((x) => x.id), injuryIds, 'injury');
+    refs(
+      label,
+      (m.injuries || []).map((x) => x.id),
+      injuryIds,
+      'injury',
+    );
   }
   // A source nobody cites is either dead weight or a sign that a citation was dropped.
   const cited = new Set();
