@@ -1,0 +1,303 @@
+{
+ "id": "a2-pulley-injury",
+ "name": {
+  "zh": "A2 滑车损伤",
+  "en": "A2 pulley injury"
+ },
+ "aliases": [
+  {
+   "zh": "手指滑车损伤",
+   "en": "Finger flexor pulley injury"
+  }
+ ],
+ "sports": [
+  "climbing"
+ ],
+ "structures": [
+  {
+   "id": "pulley-a2-ring",
+   "involvement": "primary"
+  },
+  {
+   "id": "pulley-a2-middle",
+   "involvement": "primary"
+  },
+  {
+   "id": "pulley-a3-ring",
+   "involvement": "associated"
+  },
+  {
+   "id": "pulley-a4-ring",
+   "involvement": "associated"
+  },
+  {
+   "id": "flexor-digitorum-profundus",
+   "involvement": "associated"
+  },
+  {
+   "id": "flexor-digitorum-superficialis",
+   "involvement": "associated"
+  }
+ ],
+ "status": "draft",
+ "overview": {
+  "zh": "手指的屈肌腱由一串环形和交叉的纤维带（滑车）固定在指骨旁，屈指时防止肌腱离开骨面，肌腱离开骨面的情况被称为\"弓弦\"现象。A2 被描述为环形滑车中最厚、最强的一个。滑车损伤是一个连续的范围：从拉伤、部分撕裂、单个滑车完全断裂，到多个滑车断裂。它既可以由一次突然的高强度负荷引起，也可以由长期反复的负荷引起。",
+  "en": "The finger flexor tendons are held against the finger bones by a series of annular and cruciate fibrous bands (pulleys), which stop the tendon lifting away from the bone during flexion; that lifting is called bowstringing. A2 is described as the thickest and strongest of the annular pulleys. Pulley injury is a spectrum, from strain through partial tear and complete tear of one pulley to tears of several pulleys. It can follow a single sudden overload or persistent repeated loading.",
+  "sources": [
+   "larsson-2022",
+   "berrigan-2022",
+   "simon-2022"
+  ]
+ },
+ "mechanism": [
+  {
+   "zh": "一篇系统综述指出，全握（full crimp）姿势会让 A2 和 A4 滑车承受最大的负荷，而开手抓握时滑车的负荷很低。",
+   "en": "A systematic review states that the full crimp position sets the condition for maximum load on the A2 and A4 pulleys, while the open hand grip gives very low pulley loads.",
+   "sources": [
+    "larsson-2022"
+   ]
+  },
+  {
+   "zh": "多数滑车损伤被描述为发生在手指负荷突然急剧增加的时候，例如脚突然滑脱。综述转引的数字称，攀岩中 A2 滑车受力可达约 380 牛，受到突然冲击时约 450 牛；这两个数字是转引，我们没有读到原始研究。",
+   "en": "Most pulley injuries are described as happening when finger load rises suddenly and sharply, for example when a foot slips. Figures relayed by a review put A2 pulley load in climbing at up to about 380 N, and about 450 N under sudden shock loading; these figures are second-hand and we have not read the original studies.",
+   "sources": [
+    "larsson-2022",
+    "iruretagoiena-2020"
+   ]
+  },
+  {
+   "zh": "文献报告环指最常受累，其次是中指；滑车中 A2 最常受累，其次是 A4。",
+   "en": "The ring finger is reported as most often affected, followed by the middle finger; among the pulleys A2 is reported most often, followed by A4.",
+   "sources": [
+    "iruretagoiena-2023",
+    "iruretagoiena-2024"
+   ]
+  }
+ ],
+ "reported_signs": [
+  {
+   "zh": "急性损伤被描述为活动中突然出现的锐痛，有时伴有能听到的\"啪\"的一声，随后手指肿胀。",
+   "en": "Acute injury is described as sudden sharp pain during activity, sometimes with an audible pop, followed by swelling of the finger.",
+   "sources": [
+    "berrigan-2022"
+   ]
+  },
+  {
+   "zh": "文献描述的体征包括：受伤滑车所在位置的手指掌侧压痛、肿胀，偶尔有瘀血；按压或抗阻屈指时疼痛加重。",
+   "en": "Findings described in the literature include tenderness on the palm side of the finger at the level of the injured pulley, swelling and occasionally bruising, with pain that increases on pressure and on resisted finger flexion.",
+   "sources": [
+    "simon-2022",
+    "iruretagoiena-2020"
+   ]
+  },
+  {
+   "zh": "弓弦现象可能被疼痛和肿胀掩盖而难以看出，程度较轻的损伤表现得很不明显。",
+   "en": "Bowstringing can be hard to see because pain and swelling mask it, and lower-severity injuries show it only subtly.",
+   "sources": [
+    "berrigan-2022"
+   ]
+  },
+  {
+   "zh": "体格检查被描述为缺乏特异性，需要影像检查才能明确受累滑车的数量和程度。",
+   "en": "Physical examination is described as non-specific, so imaging is needed to establish how many pulleys are involved and how severely.",
+   "sources": [
+    "iruretagoiena-2023"
+   ]
+  }
+ ],
+ "red_flags": [
+  {
+   "zh": "受伤时听到或感到\"啪\"的一声，并出现明显肿胀，或在手指掌侧能看到肌腱隆起。文献指出，后续恢复和处理方式取决于受累滑车的数量和程度，这需要由医生结合影像检查来确定。",
+   "en": "A pop heard or felt at the moment of injury together with marked swelling, or a tendon visibly standing out on the palm side of the finger. The literature notes that outlook and management depend on how many pulleys are injured and how severely, which has to be established by a clinician with imaging.",
+   "sources": [
+    "berrigan-2022",
+    "iruretagoiena-2023"
+   ]
+  },
+  {
+   "zh": "怀疑不止一个滑车受累。多个滑车损伤如果没有得到恰当处理，可能出现关节挛缩以及活动和功能的丧失；有专科中心把\"开始处理时受伤已超过 10 天\"列为需要手术的情形之一，所以不宜拖延。",
+   "en": "A suspicion that more than one pulley is involved. Without appropriate care, multiple-pulley injuries can lead to joint contracture and loss of motion and function; one specialist centre lists an injury more than 10 days old at the start of care among its indications for surgery, so delay is unwise.",
+   "sources": [
+    "simon-2022"
+   ]
+  },
+  {
+   "zh": "不能排除骨折。文献建议在怀疑滑车损伤时拍 X 光片排除骨折，这需要线下就诊。",
+   "en": "A fracture cannot be ruled out. The literature recommends plain radiographs to rule out fractures when a pulley injury is suspected, which requires an in-person visit.",
+   "sources": [
+    "mergoum-2025"
+   ]
+  },
+  {
+   "zh": "青少年攀岩者出现手指疼痛，尤其是近指间关节背侧（手背一侧）疼痛。骨骼尚未发育成熟的攀岩者很少出现滑车断裂，而生长板的应力性损伤是青少年攀岩者中最常见的损伤，并且常常在 X 光片上看不出来，应尽快由熟悉攀岩损伤的医生评估。",
+   "en": "Finger pain in an adolescent climber, especially on the back of the middle finger joint (PIP joint). Pulley rupture is rare in skeletally immature climbers, whereas stress injury of the growth plate is the most frequent injury in adolescent climbers and is often not visible on plain radiographs, so prompt assessment by a clinician familiar with climbing injuries is needed.",
+   "sources": [
+    "meyers-2020",
+    "schoffl-2025-adolescent",
+    "schoffl-2025-ppsi"
+   ]
+  }
+ ],
+ "general_principles": [
+  {
+   "zh": "按综述转述的分级方案，1 至 3 级通常采用非手术方式处理，4 级通常需要手术重建。具体属于哪一级只能由医生结合影像检查判断。",
+   "en": "Under the grading scheme as reproduced by a review, grades 1 to 3 are usually managed without surgery and grade 4 usually by surgical reconstruction. Which grade applies can only be judged by a clinician with imaging.",
+   "sources": [
+    "larsson-2022"
+   ]
+  },
+  {
+   "zh": "综述强调贴扎只是辅助手段，重点在于通过练习让组织逐步重新承受负荷。",
+   "en": "The review stresses that tape is only an adjunct; the main focus is progressive loading of the tissue through exercise.",
+   "sources": [
+    "larsson-2022"
+   ]
+  },
+  {
+   "zh": "关于贴扎的证据：H 形贴扎在两项小型试验中使肌腱离开骨面的距离减少约 15% 至 22%，证据等级为低到中；对疼痛、重返运动等方面的证据被评为很低到低；该综述因证据水平低而没有给出明确的推荐。",
+   "en": "Evidence on taping: in two small trials H-tape reduced the tendon-to-bone distance by about 15 to 22 percent, at low to moderate certainty; evidence on pain, return to sport and similar outcomes was rated very low to low; the review gives no definite recommendation because of the low level of evidence.",
+   "sources": [
+    "larsson-2022"
+   ]
+  }
+ ],
+ "grading": {
+  "system": {
+   "zh": "目前最常引用的是 Schöffl 等人提出的四级分级。下面的定义取自一篇系统综述中标注\"改编自 Schöffl 等\"的表格，原始论文不是开放获取，我们没有读到。参考时间是各文献报告的范围，个体差异很大，不是承诺。",
+   "en": "The most widely cited scheme is the four-grade system proposed by Schöffl and colleagues. The definitions below come from a table in a systematic review marked as modified from Schöffl et al.; the original paper is not open access and we have not read it. The time frames are ranges reported in the literature, vary widely between individuals and are not promises.",
+   "sources": [
+    "larsson-2022"
+   ]
+  },
+  "grades": [
+   {
+    "grade": "1",
+    "definition": {
+     "zh": "滑车拉伤。",
+     "en": "Pulley strain."
+    },
+    "reference_course": {
+     "zh": "文献转述的重返运动时间为 6 至 8 周；另一篇综述写作 6 周后恢复完全活动。",
+     "en": "Return to sport relayed as 6 to 8 weeks; another review gives full activity after 6 weeks."
+    },
+    "sources": [
+     "larsson-2022",
+     "mergoum-2025"
+    ]
+   },
+   {
+    "grade": "2",
+    "definition": {
+     "zh": "A4 完全断裂，或 A2、A3 部分断裂。",
+     "en": "Complete rupture of A4, or partial rupture of A2 or A3."
+    },
+    "reference_course": {
+     "zh": "不同文献给出 6 至 8 周或 8 至 10 周。",
+     "en": "Sources give 6 to 8 weeks or 8 to 10 weeks."
+    },
+    "sources": [
+     "larsson-2022",
+     "iruretagoiena-2023",
+     "mergoum-2025"
+    ]
+   },
+   {
+    "grade": "3",
+    "definition": {
+     "zh": "A2 或 A3 完全断裂。",
+     "en": "Complete rupture of A2 or A3."
+    },
+    "reference_course": {
+     "zh": "文献转述约 3 个月。",
+     "en": "Relayed as about 3 months."
+    },
+    "sources": [
+     "larsson-2022",
+     "iruretagoiena-2023",
+     "mergoum-2025"
+    ]
+   },
+   {
+    "grade": "4",
+    "definition": {
+     "zh": "多个滑车断裂，或单个 A2、A3 断裂同时合并蚓状肌或侧副韧带损伤。",
+     "en": "Multiple ruptures, or a single A2 or A3 rupture combined with lumbrical muscle or collateral ligament injury."
+    },
+    "reference_course": {
+     "zh": "通常手术重建。一篇综述写作术后约 6 个月重返运动；一个专科中心的做法是术后 4 个月允许轻松攀爬，6 至 9 个月恢复专项负荷。",
+     "en": "Usually surgical reconstruction. One review gives return to play around 6 months after surgery; one specialist centre allows easy climbing after 4 months and full sport-specific load after 6 to 9 months."
+    },
+    "sources": [
+     "larsson-2022",
+     "mergoum-2025",
+     "simon-2022"
+    ]
+   }
+  ]
+ },
+ "prevention": [
+  {
+   "zh": "一篇针对成人攀岩者过度使用性损伤的系统综述发现：攀爬强度越高，损伤风险越高（强证据）；曾经受过伤是再次受伤的有力预测因素；反复使用 crimp 握法可能与损伤有关（有限证据）。这些结论针对的是过度使用性损伤整体，不是专门针对滑车。",
+   "en": "A systematic review of overuse injuries in adult climbers found strong evidence that higher climbing intensity is associated with higher injury risk, that previous injury is highly predictive of future injury, and limited evidence that repetitive use of the crimp grip might be associated with injury. These conclusions concern overuse injuries overall, not pulleys specifically.",
+   "sources": [
+    "quarmby-2023"
+   ]
+  },
+  {
+   "zh": "同一篇综述认为，现有结果不能支持把贴扎作为预防损伤的手段，也没有发现热身对过度使用性损伤有保护作用（有限证据）。",
+   "en": "The same review says its results cannot support taping as an injury-prevention measure, and found no protective effect of warming up against overuse injury (limited evidence).",
+   "sources": [
+    "quarmby-2023"
+   ]
+  },
+  {
+   "zh": "针对青少年的文献提出：减少 crimp 握法、监控训练负荷、保证充分恢复；并建议 18 岁以下避免在指力训练板（campus board）上做双手同时发力的动态训练。",
+   "en": "Literature on adolescents suggests less use of the crimp grip, monitoring of training load and adequate recovery, and advises climbers under 18 to avoid double-dyno campus-board training.",
+   "sources": [
+    "schoffl-2025-adolescent",
+    "meyers-2020"
+   ]
+  }
+ ],
+ "uncertainty": [
+  {
+   "zh": "恢复时间来自没有对照组的病例队列，不能排除这些人本来就会自然恢复；个体差异很大。",
+   "en": "Recovery times come from uncontrolled cohorts, so natural recovery cannot be excluded as the explanation; individual variation is large.",
+   "sources": [
+    "larsson-2022"
+   ]
+  },
+  {
+   "zh": "分级定义和参考时间都是二手转述，不同文献给出的数字不一致（例如 2 级为 6 至 8 周或 8 至 10 周）。",
+   "en": "The grade definitions and time frames are second-hand, and sources disagree on the numbers (for example 6 to 8 versus 8 to 10 weeks for grade 2).",
+   "sources": [
+    "larsson-2022",
+    "iruretagoiena-2023",
+    "mergoum-2025"
+   ]
+  },
+  {
+   "zh": "各研究使用的影像检查方法差异很大，包括手指摆放姿势、是否加阻力以及判断标准。",
+   "en": "Imaging methods vary considerably between studies, including finger position, use of resistance and the criteria applied.",
+   "sources": [
+    "berrigan-2022"
+   ]
+  },
+  {
+   "zh": "预防方面的证据质量参差不齐，结论需谨慎看待。",
+   "en": "The quality of prevention evidence is variable and conclusions should be read with caution.",
+   "sources": [
+    "quarmby-2023"
+   ]
+  },
+  {
+   "zh": "文献里没有现成的\"危险信号清单\"。本条目的清单是我们根据文献中\"何时需要影像检查或专科评估\"的描述整理的，属于编辑归纳，尚待专业人士审阅。",
+   "en": "The literature offers no ready-made list of red flags. The list in this entry was compiled by us from what sources say about when imaging or specialist assessment is needed; it is an editorial synthesis awaiting professional review.",
+   "sources": [
+    "berrigan-2022",
+    "simon-2022"
+   ]
+  }
+ ],
+ "disclaimer": "general"
+}
