@@ -45,7 +45,14 @@ def kind_of(n):
     return "muscle"
 
 
-def group_of(n, centre_z):
+WRIST_TOP_Z = 820  # just above the proximal carpal row in this model (carpal bones span z 781-812 mm)
+
+
+def group_of(n, centre_z, top_z):
+    # A muscle that reaches above the wrist originates in the forearm, even if it is named after a digit
+    # (extensor indicis, abductor pollicis longus): file it under the forearm.
+    if top_z > WRIST_TOP_Z and not any(k in n for k in CARPAL):
+        return "forearm"
     for g, keys in DIGIT:
         if any(k in n for k in keys) and centre_z < 800:
             return g
@@ -67,7 +74,7 @@ for r in inv:
     if n.startswith("left "):
         # the dataset labels this right-hand mesh "Left ..."; do not show a wrong side to users
         label = label[5:].capitalize() + " (source label under review)"
-    parts.append((pid, m.vertices, m.faces, dict(id=pid, name_en=label, name_zh=None, kind=kind_of(n), group=group_of(n, c[2]),
+    parts.append((pid, m.vertices, m.faces, dict(id=pid, name_en=label, name_zh=None, kind=kind_of(n), group=group_of(n, c[2], b[5]),
                                                  source="BodyParts3D 4.0", fma=r["fma"])))
 
 pm = json.load(open(pulleys_glb[:-4] + ".meta.json"))

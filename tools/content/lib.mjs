@@ -105,6 +105,14 @@ export function validate(content, modelCatalog, root = ROOT) {
       meshOwner.set(m.id, s.id);
     }
   const modelIds = new Set(modelCatalog.map((m) => m.id));
+  // The viewer zooms by model group and the app lists by structure region; they must agree.
+  const modelGroup = new Map(modelCatalog.map((m) => [m.id, m.group]));
+  for (const s of content.structures)
+    for (const m of s.meshes || []) {
+      const g = modelGroup.get(m.id);
+      if (g !== undefined && g !== s.region)
+        errors.push(`structure "${s.id}": region "${s.region}" but mesh ${m.id} is in model group "${g}"`);
+    }
   for (const id of modelIds) if (!meshOwner.has(id)) errors.push(`model mesh ${id} has no structure entry (it would show without a name)`);
   for (const [id, owner] of meshOwner) if (!modelIds.has(id)) errors.push(`structure "${owner}": mesh ${id} is not in any model catalog`);
   for (const s of content.structures) if (s.part_of && s.part_of === s.id) errors.push(`structure "${s.id}": part_of points to itself`);

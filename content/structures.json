@@ -136,6 +136,23 @@
   "names_status": "unverified"
  },
  {
+  "id": "phalanx-middle-little",
+  "name": {
+   "zh": "小指中节指骨",
+   "en": "Middle phalanx of little finger",
+   "la": "Phalanx media digiti minimi"
+  },
+  "kind": "bone",
+  "region": "little",
+  "meshes": [
+   {
+    "id": "BP3D_FJ3304",
+    "side": "right"
+   }
+  ],
+  "names_status": "unverified"
+ },
+ {
   "id": "phalanx-proximal-little",
   "name": {
    "zh": "小指近节指骨",
@@ -181,6 +198,23 @@
   "meshes": [
    {
     "id": "BP3D_FJ3196",
+    "side": "right"
+   }
+  ],
+  "names_status": "unverified"
+ },
+ {
+  "id": "phalanx-middle-middle",
+  "name": {
+   "zh": "中指中节指骨",
+   "en": "Middle phalanx of middle finger",
+   "la": "Phalanx media digiti tertii"
+  },
+  "kind": "bone",
+  "region": "middle",
+  "meshes": [
+   {
+    "id": "BP3D_FJ3306",
     "side": "right"
    }
   ],
@@ -238,25 +272,17 @@
   "names_status": "unverified"
  },
  {
-  "id": "phalanx-middle-middle",
+  "id": "phalanx-middle-ring",
   "name": {
-   "zh": "中指中节指骨",
-   "en": "Middle phalanx of middle finger",
-   "la": "Phalanx media digiti tertii"
+   "zh": "环指中节指骨",
+   "en": "Middle phalanx of ring finger",
+   "la": "Phalanx media digiti quarti"
   },
   "kind": "bone",
   "region": "ring",
   "meshes": [
    {
     "id": "BP3D_FJ3292",
-    "side": "right"
-   },
-   {
-    "id": "BP3D_FJ3304",
-    "side": "right"
-   },
-   {
-    "id": "BP3D_FJ3306",
     "side": "right"
    }
   ],
@@ -641,6 +667,23 @@
   "names_status": "unverified"
  },
  {
+  "id": "extensor-indicis",
+  "name": {
+   "zh": "示指伸肌",
+   "en": "Extensor indicis",
+   "la": "Musculus extensor indicis"
+  },
+  "kind": "muscle",
+  "region": "forearm",
+  "meshes": [
+   {
+    "id": "BP3D_FJ1493",
+    "side": "right"
+   }
+  ],
+  "names_status": "unverified"
+ },
+ {
   "id": "extensor-pollicis-brevis",
   "name": {
    "zh": "拇短伸肌",
@@ -864,23 +907,6 @@
   "meshes": [
    {
     "id": "BP3D_FJ1505",
-    "side": "right"
-   }
-  ],
-  "names_status": "unverified"
- },
- {
-  "id": "extensor-indicis",
-  "name": {
-   "zh": "示指伸肌",
-   "en": "Extensor indicis",
-   "la": "Musculus extensor indicis"
-  },
-  "kind": "muscle",
-  "region": "index",
-  "meshes": [
-   {
-    "id": "BP3D_FJ1493",
     "side": "right"
    }
   ],

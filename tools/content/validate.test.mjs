@@ -5,7 +5,10 @@ import { validate } from './lib.mjs';
 
 const T = (zh, en, sources = ['src-one']) => ({ zh, en, sources });
 const fixture = () => ({
-  catalog: [{ id: 'MESH_A' }, { id: 'MESH_B' }],
+  catalog: [
+    { id: 'MESH_A', group: 'ring' },
+    { id: 'MESH_B', group: 'ring' },
+  ],
   content: {
     sources: [
       {
@@ -163,7 +166,7 @@ rejects(
 rejects(
   'a model mesh with no structure entry',
   (c, cat) => {
-    cat.push({ id: 'MESH_C' });
+    cat.push({ id: 'MESH_C', group: 'ring' });
   },
   /MESH_C has no structure entry/,
 );
@@ -225,3 +228,10 @@ test('a draft may lack sources', () =>
     }),
     [],
   ));
+rejects(
+  'a structure region that disagrees with the model group',
+  (c) => {
+    c.structures[0].region = 'thumb';
+  },
+  /region "thumb" but mesh MESH_A is in model group "ring"/,
+);
