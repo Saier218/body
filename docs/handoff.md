@@ -25,6 +25,16 @@
 
 可选项 A（安卓安装包）：在云端编译成功，5.1 MB。步骤见 `docs/android-build.md`。可选项 C（GitHub 自动检查）：已生效，最近三次运行全部通过。
 
+## 2026-11-23 夜间
+
+见 `docs/reports/2026-11-23-overnight.md`。要点：
+
+- 全身概览完成（决策 0011）：模型由 `tools/modeling/build_overview.py` 生成；哪些部位可进入由 `content/regions.json` 决定。
+- 小程序恢复为并行外壳（决策 0012），由 `npm run build:miniprogram` 生成共用部分；从未在微信中运行。
+- 动作、损伤两个标签各有调研与两套方案，待负责人选择（`docs/design/proposals/`）。
+- 修正：镜像污染缓存模型导致"左手变右手"；界面文字中的禁用词。均已加自动检查。
+- 访谈提纲 `docs/product/interview-guide.md`；下一阶段计划 `docs/product/plan-2026-11-23.md`。
+
 ## 2026-11-22 晚：产品纲领与首屏定稿
 
 - 新增 `docs/product/playbook.md`（五个层次、想法流程、对话约定）、想法收件箱 `docs/product/ideas.md`、决策模板 `docs/decisions/TEMPLATE.md`。
