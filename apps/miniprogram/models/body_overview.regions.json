@@ -1,0 +1,266 @@
+[
+ {
+  "id": "OV_FOOT_L_BONE",
+  "region": "foot",
+  "side": "left",
+  "kind": "bone",
+  "faces": 268,
+  "sources": 20
+ },
+ {
+  "id": "OV_FOOT_L_MUSCLE",
+  "region": "foot",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 426,
+  "sources": 21
+ },
+ {
+  "id": "OV_FOOT_R_BONE",
+  "region": "foot",
+  "side": "right",
+  "kind": "bone",
+  "faces": 260,
+  "sources": 20
+ },
+ {
+  "id": "OV_FOOT_R_MUSCLE",
+  "region": "foot",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 426,
+  "sources": 21
+ },
+ {
+  "id": "OV_FOREARM_L_BONE",
+  "region": "forearm",
+  "side": "left",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 3
+ },
+ {
+  "id": "OV_FOREARM_L_MUSCLE",
+  "region": "forearm",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 1180,
+  "sources": 23
+ },
+ {
+  "id": "OV_FOREARM_R_BONE",
+  "region": "forearm",
+  "side": "right",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 3
+ },
+ {
+  "id": "OV_FOREARM_R_MUSCLE",
+  "region": "forearm",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 1178,
+  "sources": 23
+ },
+ {
+  "id": "OV_HAND_L_BONE",
+  "region": "hand",
+  "side": "left",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 27
+ },
+ {
+  "id": "OV_HAND_L_MUSCLE",
+  "region": "hand",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 238,
+  "sources": 10
+ },
+ {
+  "id": "OV_HAND_R_BONE",
+  "region": "hand",
+  "side": "right",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 27
+ },
+ {
+  "id": "OV_HAND_R_MUSCLE",
+  "region": "hand",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 240,
+  "sources": 10
+ },
+ {
+  "id": "OV_HEAD_NECK_M_BONE",
+  "region": "head-neck",
+  "side": "mid",
+  "kind": "bone",
+  "faces": 2902,
+  "sources": 30
+ },
+ {
+  "id": "OV_HEAD_NECK_M_MUSCLE",
+  "region": "head-neck",
+  "side": "mid",
+  "kind": "muscle",
+  "faces": 4146,
+  "sources": 66
+ },
+ {
+  "id": "OV_LOWER_LEG_L_BONE",
+  "region": "lower-leg",
+  "side": "left",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 3
+ },
+ {
+  "id": "OV_LOWER_LEG_L_MUSCLE",
+  "region": "lower-leg",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 762,
+  "sources": 11
+ },
+ {
+  "id": "OV_LOWER_LEG_R_BONE",
+  "region": "lower-leg",
+  "side": "right",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 3
+ },
+ {
+  "id": "OV_LOWER_LEG_R_MUSCLE",
+  "region": "lower-leg",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 762,
+  "sources": 11
+ },
+ {
+  "id": "OV_PELVIS_M_MUSCLE",
+  "region": "pelvis",
+  "side": "mid",
+  "kind": "muscle",
+  "faces": 370,
+  "sources": 5
+ },
+ {
+  "id": "OV_SHOULDER_L_BONE",
+  "region": "shoulder",
+  "side": "left",
+  "kind": "bone",
+  "faces": 596,
+  "sources": 2
+ },
+ {
+  "id": "OV_SHOULDER_L_MUSCLE",
+  "region": "shoulder",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 324,
+  "sources": 10
+ },
+ {
+  "id": "OV_SHOULDER_R_BONE",
+  "region": "shoulder",
+  "side": "right",
+  "kind": "bone",
+  "faces": 556,
+  "sources": 2
+ },
+ {
+  "id": "OV_SHOULDER_R_MUSCLE",
+  "region": "shoulder",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 324,
+  "sources": 10
+ },
+ {
+  "id": "OV_THIGH_L_BONE",
+  "region": "thigh",
+  "side": "left",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 2
+ },
+ {
+  "id": "OV_THIGH_L_MUSCLE",
+  "region": "thigh",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 1478,
+  "sources": 25
+ },
+ {
+  "id": "OV_THIGH_R_BONE",
+  "region": "thigh",
+  "side": "right",
+  "kind": "bone",
+  "faces": 312,
+  "sources": 3
+ },
+ {
+  "id": "OV_THIGH_R_MUSCLE",
+  "region": "thigh",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 1478,
+  "sources": 25
+ },
+ {
+  "id": "OV_TORSO_M_BONE",
+  "region": "torso",
+  "side": "mid",
+  "kind": "bone",
+  "faces": 4352,
+  "sources": 40
+ },
+ {
+  "id": "OV_TORSO_M_MUSCLE",
+  "region": "torso",
+  "side": "mid",
+  "kind": "muscle",
+  "faces": 12252,
+  "sources": 51
+ },
+ {
+  "id": "OV_UPPER_ARM_L_BONE",
+  "region": "upper-arm",
+  "side": "left",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 8
+ },
+ {
+  "id": "OV_UPPER_ARM_L_MUSCLE",
+  "region": "upper-arm",
+  "side": "left",
+  "kind": "muscle",
+  "faces": 240,
+  "sources": 6
+ },
+ {
+  "id": "OV_UPPER_ARM_R_BONE",
+  "region": "upper-arm",
+  "side": "right",
+  "kind": "bone",
+  "faces": 240,
+  "sources": 8
+ },
+ {
+  "id": "OV_UPPER_ARM_R_MUSCLE",
+  "region": "upper-arm",
+  "side": "right",
+  "kind": "muscle",
+  "faces": 240,
+  "sources": 6
+ }
+]
