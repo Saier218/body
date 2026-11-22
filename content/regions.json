@@ -1,0 +1,14 @@
+[
+ { "id": "hand", "name": { "zh": "手", "en": "hand" }, "bilateral": true,
+   "detail": { "model": "hand_right", "side": "right", "frame": ["thumb", "index", "middle", "ring", "little", "palm", "wrist"] } },
+ { "id": "forearm", "name": { "zh": "前臂", "en": "forearm" }, "bilateral": true,
+   "detail": { "model": "hand_right", "side": "right", "frame": ["forearm"] } },
+ { "id": "shoulder", "name": { "zh": "肩", "en": "shoulder" }, "bilateral": true },
+ { "id": "upper-arm", "name": { "zh": "上臂", "en": "upper arm" }, "bilateral": true },
+ { "id": "head-neck", "name": { "zh": "头颈", "en": "Head and neck" }, "bilateral": false },
+ { "id": "torso", "name": { "zh": "躯干", "en": "Torso" }, "bilateral": false },
+ { "id": "pelvis", "name": { "zh": "骨盆与髋", "en": "Pelvis and hip" }, "bilateral": false },
+ { "id": "thigh", "name": { "zh": "大腿", "en": "thigh" }, "bilateral": true },
+ { "id": "lower-leg", "name": { "zh": "小腿", "en": "lower leg" }, "bilateral": true },
+ { "id": "foot", "name": { "zh": "足", "en": "foot" }, "bilateral": true }
+]

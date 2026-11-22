@@ -12,12 +12,14 @@ usage: build_app_model.py INVENTORY_JSON OBJ_DIR PULLEYS_GLB OUT_PREFIX APP_PREF
 """
 import json
 import os
-import struct
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # our own helpers; -I keeps the data dir off the path
 
 import brotli
 import numpy as np
 import trimesh
+from glb_writer import to_app, write_glb
 
 inv = json.load(open(sys.argv[1]))
 objdir, pulleys_glb, out, app = sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -86,48 +88,8 @@ for meta in pm:
 
 allv = np.vstack([v for _, v, _, _ in parts])
 centre = (allv.min(0) + allv.max(0)) / 2
+glb, tri = write_glb(out + ".glb", [(pid, to_app(v, centre), f) for pid, v, f, _ in parts], "body build_app_model.py")
 
-
-def to_app(v):
-    v = np.asarray(v, dtype=np.float64) - centre
-    return np.c_[v[:, 0], v[:, 2], -v[:, 1]].astype(np.float32)  # Z up -> Y up
-
-
-blob, views, accessors, meshes, nodes = bytearray(), [], [], [], []
-
-
-def push(data, target):
-    while len(blob) % 4:
-        blob.append(0)
-    views.append(dict(buffer=0, byteOffset=len(blob), byteLength=len(data), target=target))
-    blob.extend(data)
-    return len(views) - 1
-
-
-tri = 0
-for pid, v, f, _ in parts:
-    v = to_app(v)
-    f = np.asarray(f)
-    assert pid.isascii()
-    idx = f.astype(np.uint16 if len(v) < 65536 else np.uint32).ravel()
-    pv = push(v.tobytes(), 34962)
-    accessors.append(dict(bufferView=pv, componentType=5126, count=len(v), type="VEC3", min=v.min(0).tolist(), max=v.max(0).tolist()))
-    iv = push(idx.tobytes(), 34963)
-    accessors.append(dict(bufferView=iv, componentType=5123 if idx.dtype == np.uint16 else 5125, count=len(idx), type="SCALAR"))
-    meshes.append(dict(primitives=[dict(attributes=dict(POSITION=len(accessors) - 2), indices=len(accessors) - 1)]))
-    nodes.append(dict(name=pid, mesh=len(meshes) - 1))
-    tri += len(f)
-
-while len(blob) % 4:
-    blob.append(0)
-gltf = dict(asset=dict(version="2.0", generator="body build_app_model.py",
-                       copyright="Base anatomy: BodyParts3D, (c) The Database Center for Life Science licensed under CC Attribution 4.0 International"),
-            scene=0, scenes=[dict(nodes=list(range(len(nodes))))], nodes=nodes, meshes=meshes, accessors=accessors, bufferViews=views,
-            buffers=[dict(byteLength=len(blob))])
-js = json.dumps(gltf, separators=(",", ":"), ensure_ascii=True).encode()
-js += b" " * (-len(js) % 4)
-glb = struct.pack("<III", 0x46546C67, 2, 12 + 8 + len(js) + 8 + len(blob)) + struct.pack("<II", len(js), 0x4E4F534A) + js + struct.pack("<II", len(blob), 0x004E4942) + bytes(blob)
-open(out + ".glb", "wb").write(glb)
 br = brotli.compress(glb, quality=11)
 open(app + ".glb.br", "wb").write(br)
 for prefix in (out, app):

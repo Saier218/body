@@ -26,7 +26,23 @@ export interface Movement {
   structures: { id: string }[];
 }
 
+export interface Region {
+  id: string;
+  name: { zh: string; en: string };
+  bilateral: boolean;
+  detail?: { model: string; side: 'left' | 'right'; frame: string[] };
+}
+
+/** One node of the whole-body overview model. */
+export interface OverviewNode {
+  id: string;
+  region: string;
+  side: 'left' | 'right' | 'mid';
+  kind: string;
+}
+
 export interface ContentBundle {
+  regions: Region[];
   structures: Record<string, Structure>;
   meshIndex: Record<string, string>;
   injuries: Record<string, Injury>;
@@ -39,9 +55,6 @@ export interface CatalogEntry {
   group: string;
 }
 
-/** Groups that make up "the hand" for the first screen. */
-export const HAND_GROUPS = ['thumb', 'index', 'middle', 'ring', 'little', 'palm', 'wrist'];
-
 /** Layer order, which is also the order of the layer chips. */
 export const KINDS = ['bone', 'muscle', 'fascia', 'pulley'];
 
@@ -51,16 +64,24 @@ async function getJson<T>(url: string): Promise<T> {
   return (await r.json()) as T;
 }
 
-export async function loadAll(): Promise<{ glb: ArrayBuffer; catalog: CatalogEntry[]; content: ContentBundle }> {
-  const [glb, catalog, content] = await Promise.all([
-    fetch('./models/hand_right.glb').then((r) => {
-      if (!r.ok) throw new Error(`model: HTTP ${r.status}`);
-      return r.arrayBuffer();
-    }),
-    getJson<CatalogEntry[]>('./models/hand_right.catalog.json'),
+async function getGlb(url: string): Promise<ArrayBuffer> {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+  return r.arrayBuffer();
+}
+
+export async function loadOverview(): Promise<{ glb: ArrayBuffer; nodes: OverviewNode[]; content: ContentBundle }> {
+  const [glb, nodes, content] = await Promise.all([
+    getGlb('./models/body_overview.glb'),
+    getJson<OverviewNode[]>('./models/body_overview.regions.json'),
     getJson<ContentBundle>('./content/bundle.json'),
   ]);
-  return { glb, catalog, content };
+  return { glb, nodes, content };
+}
+
+export async function loadDetail(model: string): Promise<{ glb: ArrayBuffer; catalog: CatalogEntry[] }> {
+  const [glb, catalog] = await Promise.all([getGlb(`./models/${model}.glb`), getJson<CatalogEntry[]>(`./models/${model}.catalog.json`)]);
+  return { glb, catalog };
 }
 
 /** Shipped injuries and movements that mention a structure (drafts never reach the bundle). */

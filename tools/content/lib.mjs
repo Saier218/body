@@ -33,16 +33,25 @@ export function loadContent(root = ROOT) {
     sources: readJson(join(c, 'sources.json')),
     sports: readJson(join(c, 'sports.json')),
     structures: readJson(join(c, 'structures.json')),
+    regions: readJson(join(c, 'regions.json')),
     injuries: readDir(join(c, 'injuries')).map((x) => x.data),
     movements: readDir(join(c, 'movements')).map((x) => x.data),
   };
+}
+
+/** Region nodes of the whole-body overview model(s). */
+export function loadOverviewCatalogs(root = ROOT) {
+  const dir = join(root, 'models/generated');
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.regions.json'))
+    .flatMap((f) => readJson(join(dir, f)));
 }
 
 export function loadModelCatalogs(root = ROOT) {
   const dir = join(root, 'models/generated');
   return readdirSync(dir)
     .filter((f) => f.endsWith('.catalog.json'))
-    .flatMap((f) => readJson(join(dir, f)));
+    .flatMap((f) => readJson(join(dir, f)).map((m) => ({ ...m, model: f.slice(0, -'.catalog.json'.length) })));
 }
 
 function compileSchemas(root) {
@@ -77,7 +86,7 @@ function* sourced(node, path) {
 }
 
 /** Returns a list of human-readable problems; empty means the content may ship. */
-export function validate(content, modelCatalog, root = ROOT) {
+export function validate(content, modelCatalog, root = ROOT, overviewCatalog = []) {
   const errors = [];
   const schema = compileSchemas(root);
   const check = (kind, list) => {
@@ -96,6 +105,23 @@ export function validate(content, modelCatalog, root = ROOT) {
   const structureIds = check('structure', content.structures);
   const injuryIds = check('injury', content.injuries);
   check('movement', content.movements);
+  const regionIds = check('region', content.regions || []);
+
+  // Overview <-> regions: every region node on the body belongs to a known region, and every region page points at a
+  // model that exists and at groups that model actually has.
+  for (const n of overviewCatalog) if (!regionIds.has(n.region)) errors.push(`overview node ${n.id}: unknown region "${n.region}"`);
+  const groupsByModel = new Map();
+  for (const m of modelCatalog) {
+    const model = m.model;
+    if (!groupsByModel.has(model)) groupsByModel.set(model, new Set());
+    groupsByModel.get(model).add(m.group);
+  }
+  for (const r of content.regions || []) {
+    if (!r.detail) continue;
+    const groups = groupsByModel.get(r.detail.model);
+    if (!groups) errors.push(`region "${r.id}": model "${r.detail.model}" has no catalog`);
+    else for (const g of r.detail.frame) if (!groups.has(g)) errors.push(`region "${r.id}": model "${r.detail.model}" has no group "${g}"`);
+  }
 
   // Model <-> content: each mesh in the shipped model belongs to exactly one structure, and every listed mesh exists.
   const meshOwner = new Map();

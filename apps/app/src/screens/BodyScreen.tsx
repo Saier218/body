@@ -2,16 +2,31 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createViewer, type Viewer } from '../../../../packages/viewer-core/src';
 import { Icon } from '../components/Icon';
 import { SideSwitch, type Side } from '../components/SideSwitch';
-import { HAND_GROUPS, KINDS, loadAll, related, type CatalogEntry, type ContentBundle, type Structure } from '../content';
+import {
+  KINDS,
+  loadDetail,
+  loadOverview,
+  related,
+  type CatalogEntry,
+  type ContentBundle,
+  type OverviewNode,
+  type Region,
+  type Structure,
+} from '../content';
 import { hostCanvas } from '../host';
 import { useT, type TextKey } from '../i18n';
 import { bindPointers } from '../pointer';
 
-/** The model file holds a right hand; the left hand is shown as its mirror image (decision 0010). */
-const MODEL_SIDE: Side = 'right';
-const DEFAULT_SIDE: Side = 'left';
 /** Fit the camera to bones and pulleys: long muscles would stretch a region up the arm. */
 const FRAME_KINDS = ['bone', 'pulley'];
+/** Front view of the whole body, seen from slightly above. */
+const FRONT = { theta: 0, phi: 1.47 };
+/** Time the camera takes to fly towards a region before the detailed model replaces the overview. */
+const FLY_MS = 400;
+
+type Level = 'overview' | 'region';
+type Status = 'loading' | 'ready' | 'err_webgl2' | 'err_load';
+type Detail = { glb: ArrayBuffer; catalog: CatalogEntry[] };
 
 function token(name: string): number | undefined {
   const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -23,6 +38,12 @@ function cssSize(el: HTMLElement): { width: number; height: number } {
   return { width: Math.round(r.width), height: Math.round(r.height) };
 }
 
+/** Overview nodes as the viewer sees them: regions without a page get the muted "idle" colours. */
+function overviewCatalog(nodes: OverviewNode[], regions: Region[]): CatalogEntry[] {
+  const active = new Set(regions.filter((r) => r.detail).map((r) => r.id));
+  return nodes.map((n) => ({ id: n.id, kind: active.has(n.region) ? n.kind : `idle-${n.kind}`, group: `${n.region}:${n.side}` }));
+}
+
 interface Props {
   hidden: boolean;
   report: (line: string) => void;
@@ -30,28 +51,119 @@ interface Props {
   onBenchDone: (line: string) => void;
 }
 
-type Status = 'loading' | 'ready' | 'err_webgl2' | 'err_load';
-
 export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props) {
   const { t, td, lang } = useT();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<Viewer | null>(null);
+  const overviewRef = useRef<{ glb: ArrayBuffer; catalog: CatalogEntry[]; nodes: OverviewNode[] } | null>(null);
+  const detailsRef = useRef(new Map<string, Promise<Detail>>());
+  const flyTimer = useRef(0);
+
   const [status, setStatus] = useState<Status>('loading');
-  const [data, setData] = useState<{ catalog: CatalogEntry[]; content: ContentBundle } | null>(null);
-  const [side, setSide] = useState<Side>(DEFAULT_SIDE);
+  const [content, setContent] = useState<ContentBundle | null>(null);
+  const [level, setLevel] = useState<Level>('overview');
+  const [region, setRegion] = useState<Region | null>(null);
+  const [side, setSide] = useState<Side>('left');
+  const [notice, setNotice] = useState<{ region: Region; side: OverviewNode['side'] } | null>(null);
   const [group, setGroup] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [hiddenKinds, setHiddenKinds] = useState<ReadonlySet<string>>(new Set());
   const [listOpen, setListOpen] = useState(false);
 
-  const structures = data?.content.structures;
-  const current: Structure | null = (selected && structures?.[selected]) || null;
+  const regions = content?.regions ?? [];
+  const current: Structure | null = (selected && content?.structures[selected]) || null;
 
-  /** Select a structure (zooming into its region first if needed); null clears the selection. */
+  const regionLabel = useCallback(
+    (r: Region, s: OverviewNode['side']) =>
+      !r.bilateral || s === 'mid'
+        ? r.name[lang]
+        : lang === 'zh'
+          ? t(s === 'left' ? 'side_word_left' : 'side_word_right') + r.name.zh
+          : `${t(s === 'left' ? 'side_word_left' : 'side_word_right')} ${r.name.en}`,
+    [lang, t],
+  );
+
+  const detailFor = useCallback((model: string) => {
+    let p = detailsRef.current.get(model);
+    if (!p) {
+      p = loadDetail(model);
+      detailsRef.current.set(model, p);
+    }
+    return p;
+  }, []);
+
+  /** Fly into a region; regions without a page only show a notice. */
+  const enterRegion = useCallback(
+    (r: Region, s: OverviewNode['side']) => {
+      const viewer = viewerRef.current;
+      if (!viewer) return;
+      if (!r.detail) {
+        setNotice({ region: r, side: s });
+        return;
+      }
+      const d = r.detail;
+      const targetSide: Side = s === 'mid' ? d.side : s;
+      setNotice(null);
+      setListOpen(false);
+      viewer.focus({ frame: [`${r.id}:${s}`], highlight: null });
+      const started = Date.now();
+      window.clearTimeout(flyTimer.current);
+      detailFor(d.model)
+        .then((detail) => {
+          flyTimer.current = window.setTimeout(
+            () => {
+              viewer.clear();
+              viewer.load(detail.glb, detail.catalog);
+              viewer.setMirrored(targetSide !== d.side);
+              viewer.focus({ frame: d.frame, highlight: null, frameKinds: FRAME_KINDS, instant: true });
+              hiddenKinds.forEach((k) => viewer.setKindVisible(k, false));
+              setRegion(r);
+              setSide(targetSide);
+              setGroup(null);
+              setSelected(null);
+              setLevel('region');
+            },
+            Math.max(0, FLY_MS - (Date.now() - started)),
+          );
+        })
+        .catch((e: unknown) => {
+          setStatus('err_load');
+          report('ERROR ' + String((e as Error)?.message ?? e));
+        });
+    },
+    [detailFor, hiddenKinds, report],
+  );
+
+  const backToOverview = () => {
+    const viewer = viewerRef.current;
+    const ov = overviewRef.current;
+    if (!viewer || !ov) return;
+    window.clearTimeout(flyTimer.current);
+    viewer.clear();
+    viewer.load(ov.glb, ov.catalog);
+    viewer.setOrbit(FRONT.theta, FRONT.phi);
+    if (region) viewer.focus({ frame: [`${region.id}:${region.bilateral ? side : 'mid'}`], highlight: null, instant: true });
+    viewer.focus({ frame: null, highlight: null });
+    setLevel('overview');
+    setRegion(null);
+    setGroup(null);
+    setSelected(null);
+    setListOpen(false);
+  };
+
+  const resetOverview = () => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    setNotice(null);
+    viewer.setOrbit(FRONT.theta, FRONT.phi);
+    viewer.focus({ frame: null, highlight: null });
+  };
+
+  /** Within a region: select a structure, nudging the camera towards its group; null clears the selection. */
   const selectStructure = useCallback(
     (id: string | null) => {
       const viewer = viewerRef.current;
-      const s = id && data ? data.content.structures[id] : null;
+      const s = id && content ? content.structures[id] : null;
       if (!viewer) return;
       if (s && s.region !== group) {
         setGroup(s.region);
@@ -60,31 +172,51 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
       setSelected(s ? s.id : null);
       viewer.select(s ? s.meshes.map((m) => m.id) : null);
     },
-    [data, group],
+    [content, group],
   );
 
-  const goHand = () => {
+  const closeCard = () => {
+    setSelected(null);
     setGroup(null);
-    setSelected(null);
     viewerRef.current?.select(null);
-    viewerRef.current?.focus({ frame: HAND_GROUPS, highlight: null, frameKinds: FRAME_KINDS });
+    if (region?.detail) viewerRef.current?.focus({ frame: region.detail.frame, highlight: null, frameKinds: FRAME_KINDS });
   };
-  const goGroup = () => {
-    setSelected(null);
-    viewerRef.current?.select(null);
+
+  const changeSide = (s: Side) => {
+    setSide(s);
+    if (region?.detail) viewerRef.current?.setMirrored(s !== region.detail.side);
   };
 
   // The viewer's tap callback is set once; it always calls the latest handler through this ref.
   const pickRef = useRef<(meshId: string | null) => void>(() => {});
   useEffect(() => {
-    pickRef.current = (meshId) => selectStructure(meshId && data ? (data.content.meshIndex[meshId] ?? null) : null);
-  }, [selectStructure, data]);
+    pickRef.current = (meshId) => {
+      if (!content) return;
+      if (level === 'overview') {
+        const node = meshId ? overviewRef.current?.nodes.find((n) => n.id === meshId) : undefined;
+        const r = node && content.regions.find((x) => x.id === node.region);
+        if (r && node) enterRegion(r, node.side);
+        else setNotice(null);
+      } else {
+        selectStructure(meshId ? (content.meshIndex[meshId] ?? null) : null);
+      }
+    };
+  }, [content, level, enterRegion, selectStructure]);
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement;
     let cancelled = false;
     const size = cssSize(canvas);
     const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const colors: Record<string, number> = {};
+    for (const k of KINDS) {
+      const c = token(`--c-layer-${k}`);
+      if (c !== undefined) colors[k] = c;
+    }
+    for (const k of ['bone', 'muscle']) {
+      const c = token(`--c-idle-${k}`);
+      if (c !== undefined) colors[`idle-${k}`] = c;
+    }
     let viewer: Viewer;
     try {
       viewer = createViewer({
@@ -93,12 +225,11 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
         height: Math.max(1, size.height),
         pixelRatio: dpr,
         background: null,
-        colors: Object.fromEntries(KINDS.flatMap((k) => (token(`--c-layer-${k}`) ? [[k, token(`--c-layer-${k}`) as number]] : []))),
+        colors,
         selectColor: token('--c-accent'),
       });
     } catch (e) {
-      const webgl = (e as Error).message === 'WEBGL2_UNAVAILABLE';
-      setStatus(webgl ? 'err_webgl2' : 'err_load');
+      setStatus((e as Error).message === 'WEBGL2_UNAVAILABLE' ? 'err_webgl2' : 'err_load');
       report('ERROR ' + String((e as Error).message ?? e));
       return;
     }
@@ -111,19 +242,23 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
     });
     ro.observe(canvas);
     const started = performance.now();
-    loadAll()
-      .then(({ glb, catalog, content }) => {
+    loadOverview()
+      .then(({ glb, nodes, content: bundle }) => {
         if (cancelled) return;
         const fetched = performance.now();
+        const catalog = overviewCatalog(nodes, bundle.regions);
+        overviewRef.current = { glb, catalog, nodes };
         viewer.load(glb, catalog);
-        viewer.focus({ frame: HAND_GROUPS, highlight: null, frameKinds: FRAME_KINDS, instant: true });
+        viewer.setOrbit(FRONT.theta, FRONT.phi);
         const s = viewer.stats();
         report(`canvas ${size.width}x${size.height} @${dpr}x`);
         report(`GL ${s.glVersion}`);
-        report(`${s.meshes} meshes, ${s.triangles} triangles`);
+        report(`overview: ${s.meshes} parts, ${s.triangles} triangles`);
         report(`fetch ${Math.round(fetched - started)} ms, build ${Math.round(performance.now() - fetched)} ms`);
-        setData({ catalog, content });
+        setContent(bundle);
         setStatus('ready');
+        // fetch region models in the background so entering a region does not wait for the network
+        for (const r of bundle.regions) if (r.detail) void detailFor(r.detail.model).catch(() => {});
       })
       .catch((e: unknown) => {
         if (cancelled) return;
@@ -132,17 +267,13 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
       });
     return () => {
       cancelled = true;
+      window.clearTimeout(flyTimer.current);
       ro.disconnect();
       unbind();
       viewer.dispose();
       viewerRef.current = null;
     };
-  }, [report]);
-
-  // Mirroring is applied only once the geometry exists, and whenever the switch changes.
-  useEffect(() => {
-    if (status === 'ready') viewerRef.current?.setMirrored(side !== MODEL_SIDE);
-  }, [side, status]);
+  }, [report, detailFor]);
 
   useEffect(() => {
     if (benchRequest === 0) return;
@@ -154,7 +285,8 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
           onBenchDone('benchmark skipped: model not loaded');
           return;
         }
-        viewer.benchmark(4, (fps) => onBenchDone(`benchmark ${fps.toFixed(1)} fps, ${viewer.stats().drawCalls} draw calls, ${side} hand`));
+        const where = level === 'overview' ? 'overview' : `${side} ${region?.id}`;
+        viewer.benchmark(4, (fps) => onBenchDone(`benchmark ${fps.toFixed(1)} fps, ${viewer.stats().drawCalls} draw calls, ${where}`));
       });
     });
     return () => cancelAnimationFrame(id);
@@ -170,9 +302,10 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
   };
 
   const inScope = useMemo(() => {
-    if (!structures) return [];
-    return Object.values(structures).filter((s) => (group ? s.region === group : HAND_GROUPS.includes(s.region)));
-  }, [structures, group]);
+    if (!content || !region?.detail) return [];
+    const frame = region.detail.frame;
+    return Object.values(content.structures).filter((s) => (group ? s.region === group : frame.includes(s.region)));
+  }, [content, region, group]);
 
   const pickFromList = (s: Structure) => {
     if (hiddenKinds.has(s.kind)) toggleKind(s.kind);
@@ -180,46 +313,36 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
     selectStructure(s.id);
   };
 
-  const rel = current && data ? related(data.content, current.id) : null;
+  const rel = current && content ? related(content, current.id) : null;
   const statusText: TextKey | null = status === 'loading' ? 'loading' : status === 'ready' ? null : status;
+  const title = level === 'region' && region ? regionLabel(region, side) : t('body_title');
 
   return (
     <section className="screen screen--body" hidden={hidden} aria-hidden={hidden}>
       <header className="topbar">
-        <nav className="crumbs" aria-label={t('crumbs')}>
-          {group === null && !current ? (
-            <span className="crumb" aria-current="page">
-              {t(side === 'left' ? 'hand_left' : 'hand_right')}
-            </span>
-          ) : (
-            <button type="button" className="crumb" id="crumb-root" onClick={goHand}>
-              {t(side === 'left' ? 'hand_left' : 'hand_right')}
-            </button>
-          )}
-          {group !== null && (
-            <>
-              <Icon name="chevron" small />
-              {current ? (
-                <button type="button" className="crumb" id="crumb-group" onClick={goGroup}>
-                  {td('group', group)}
-                </button>
-              ) : (
-                <span className="crumb" aria-current="page">
-                  {td('group', group)}
-                </span>
-              )}
-            </>
-          )}
-          {current && (
-            <>
-              <Icon name="chevron" small />
-              <span className="crumb crumb--leaf" aria-current="page">
-                {current.name[lang]}
-              </span>
-            </>
-          )}
-        </nav>
-        <SideSwitch side={side} onChange={setSide} />
+        {level === 'region' ? (
+          <button type="button" className="back" id="back" aria-label={t('back_body_label')} onClick={backToOverview}>
+            <Icon name="back" />
+            {t('back_body')}
+          </button>
+        ) : null}
+        <h1 className="topbar__title" id="body-title">
+          {title}
+        </h1>
+        {level === 'region' ? (
+          <SideSwitch side={side} onChange={changeSide} />
+        ) : (
+          <button
+            type="button"
+            className="icon-btn"
+            id="reset"
+            aria-label={t('reset_view')}
+            onClick={resetOverview}
+            disabled={status !== 'ready'}
+          >
+            <Icon name="reset" />
+          </button>
+        )}
       </header>
 
       <div className="body-main">
@@ -239,21 +362,23 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
           </div>
           <div className="stage__bottom">
             <p className="credit">{t('credit_short')}</p>
-            <div className="layers" role="group" aria-label={t('layers')}>
-              {KINDS.map((k) => (
-                <button
-                  key={k}
-                  type="button"
-                  className="chip"
-                  data-kind={k}
-                  aria-pressed={!hiddenKinds.has(k)}
-                  onClick={() => toggleKind(k)}
-                >
-                  <i className="swatch" style={{ background: `var(--c-layer-${k})` }} />
-                  {td('kind', k)}
-                </button>
-              ))}
-            </div>
+            {level === 'region' && (
+              <div className="layers" role="group" aria-label={t('layers')}>
+                {KINDS.map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    className="chip"
+                    data-kind={k}
+                    aria-pressed={!hiddenKinds.has(k)}
+                    onClick={() => toggleKind(k)}
+                  >
+                    <i className="swatch" style={{ background: `var(--c-layer-${k})` }} />
+                    {td('kind', k)}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -262,6 +387,23 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
             <p className={status === 'loading' ? 'sheet__hint-title' : 'sheet__error'} id="sheet-title">
               {t(statusText)}
             </p>
+          ) : level === 'overview' ? (
+            notice ? (
+              <>
+                <p className="sheet__hint-title" id="sheet-title">
+                  {regionLabel(notice.region, notice.side)}
+                </p>
+                <p className="sheet__hint">{t('region_pending')}</p>
+              </>
+            ) : (
+              <>
+                <p className="sheet__hint-title" id="sheet-title">
+                  {t('ov_hint')}
+                </p>
+                <p className="sheet__hint">{t('ov_legend')}</p>
+                <p className="sheet__hint">{t('hint_gestures')}</p>
+              </>
+            )
           ) : current ? (
             <>
               <div className="sheet__head">
@@ -275,7 +417,7 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
                     {current.name.la && <i lang="la">{current.name.la}</i>}
                   </p>
                 </div>
-                <button type="button" className="sheet__close" aria-label={t('close')} onClick={goGroup}>
+                <button type="button" className="sheet__close" id="card-close" aria-label={t('close')} onClick={closeCard}>
                   <Icon name="close" />
                 </button>
               </div>
@@ -318,50 +460,76 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
           )}
         </section>
 
-        {listOpen && structures && (
-          <section className="listview" id="listview" aria-label={t('list_title')}>
+        {listOpen && content && (
+          <section className="listview" id="listview" aria-label={level === 'overview' ? t('list_regions') : t('list_title')}>
             <header className="listview__head">
               <div>
-                <h2 className="listview__title">{t('list_title')}</h2>
-                <p className="listview__scope">{group ? td('group', group) : t(side === 'left' ? 'hand_left' : 'hand_right')}</p>
+                <h2 className="listview__title">{level === 'overview' ? t('list_regions') : t('list_title')}</h2>
+                <p className="listview__scope">{level === 'overview' ? t('body_title') : title}</p>
               </div>
               <button type="button" className="sheet__close" aria-label={t('close')} onClick={() => setListOpen(false)}>
                 <Icon name="close" />
               </button>
             </header>
             <div className="listview__body">
-              {KINDS.map((k) => {
-                const items = inScope.filter((s) => s.kind === k).sort((a, b) => a.name[lang].localeCompare(b.name[lang], lang));
-                if (items.length === 0) return null;
-                return (
-                  <section key={k}>
-                    <h3 className="listgroup__title">
-                      <i className="swatch" style={{ background: `var(--c-layer-${k})` }} />
-                      {td('kind', k)} · {items.length}
-                      {hiddenKinds.has(k) && <span className="row__note"> · {t('list_hidden_layer')}</span>}
-                    </h3>
-                    <ul>
-                      {items.map((s) => (
-                        <li key={s.id}>
-                          <button
-                            type="button"
-                            className="row"
-                            data-structure={s.id}
-                            aria-current={s.id === selected ? 'true' : undefined}
-                            onClick={() => pickFromList(s)}
-                          >
-                            <span className="row__main">
-                              <span className="row__title">{s.name[lang]}</span>
-                              <span className="row__sub">{lang === 'zh' ? s.name.en : (s.name.la ?? td('group', s.region))}</span>
-                            </span>
-                            <Icon name="chevron" small />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                );
-              })}
+              {level === 'overview' ? (
+                <ul>
+                  {[...regions]
+                    .sort((a, b) => Number(!!b.detail) - Number(!!a.detail))
+                    .flatMap((r): [Region, OverviewNode['side']][] =>
+                      r.bilateral
+                        ? [
+                            [r, 'left'],
+                            [r, 'right'],
+                          ]
+                        : [[r, 'mid']],
+                    )
+                    .map(([r, s]) => (
+                      <li key={`${r.id}:${s}`}>
+                        <button type="button" className="row" data-region={`${r.id}:${s}`} onClick={() => enterRegion(r, s)}>
+                          <span className="row__main">
+                            <span className="row__title">{regionLabel(r, s)}</span>
+                            {!r.detail && <span className="row__sub">{t('status_pending')}</span>}
+                          </span>
+                          {r.detail && <Icon name="chevron" small />}
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+              ) : (
+                KINDS.map((k) => {
+                  const items = inScope.filter((s) => s.kind === k).sort((a, b) => a.name[lang].localeCompare(b.name[lang], lang));
+                  if (items.length === 0) return null;
+                  return (
+                    <section key={k}>
+                      <h3 className="listgroup__title">
+                        <i className="swatch" style={{ background: `var(--c-layer-${k})` }} />
+                        {td('kind', k)} · {items.length}
+                        {hiddenKinds.has(k) && <span className="row__note"> · {t('list_hidden_layer')}</span>}
+                      </h3>
+                      <ul>
+                        {items.map((s) => (
+                          <li key={s.id}>
+                            <button
+                              type="button"
+                              className="row"
+                              data-structure={s.id}
+                              aria-current={s.id === selected ? 'true' : undefined}
+                              onClick={() => pickFromList(s)}
+                            >
+                              <span className="row__main">
+                                <span className="row__title">{s.name[lang]}</span>
+                                <span className="row__sub">{lang === 'zh' ? s.name.en : (s.name.la ?? td('group', s.region))}</span>
+                              </span>
+                              <Icon name="chevron" small />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  );
+                })
+              )}
             </div>
           </section>
         )}

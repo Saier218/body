@@ -177,6 +177,28 @@ export class Viewer {
     this.scene.add(this.camera);
   }
 
+  /** remove the loaded model so another one can be shown in the same canvas */
+  clear(): void {
+    this.items.forEach((it) => {
+      this.scene.remove(it.mesh);
+      it.mesh.geometry.dispose();
+      it.mesh.material.dispose();
+    });
+    this.items.clear();
+    this.selected.clear();
+    this.focused = null;
+    this.goal = null;
+    this.mirrored = false;
+    this.invalidate();
+  }
+
+  /** set the camera's orbit angles: theta around the vertical axis (0 = front), phi from the top (π/2 = level) */
+  setOrbit(theta: number, phi: number): void {
+    this.theta = theta;
+    this.phi = Math.min(Math.PI - 0.05, Math.max(0.05, phi));
+    this.invalidate();
+  }
+
   load(glb: ArrayBuffer, catalog: CatalogEntry[]): void {
     const byId = new Map(catalog.map((c) => [c.id, c] as const));
     for (const m of parseGlb(glb)) {

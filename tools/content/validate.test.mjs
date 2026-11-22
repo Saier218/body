@@ -6,9 +6,10 @@ import { validate } from './lib.mjs';
 const T = (zh, en, sources = ['src-one']) => ({ zh, en, sources });
 const fixture = () => ({
   catalog: [
-    { id: 'MESH_A', group: 'ring' },
-    { id: 'MESH_B', group: 'ring' },
+    { id: 'MESH_A', group: 'ring', model: 'm1' },
+    { id: 'MESH_B', group: 'ring', model: 'm1' },
   ],
+  overview: [{ id: 'OV_A', region: 'hand' }],
   content: {
     sources: [
       {
@@ -23,6 +24,10 @@ const fixture = () => ({
       },
     ],
     sports: [{ id: 'climbing', name: { zh: '攀岩', en: 'Climbing' }, categories: [{ id: 'grip', name: { zh: '抓握', en: 'Grip' } }] }],
+    regions: [
+      { id: 'hand', name: { zh: '手', en: 'hand' }, bilateral: true, detail: { model: 'm1', side: 'right', frame: ['ring'] } },
+      { id: 'thigh', name: { zh: '大腿', en: 'thigh' }, bilateral: true },
+    ],
     structures: [
       {
         id: 'thing-a',
@@ -76,8 +81,8 @@ const fixture = () => ({
 });
 const problems = (mutate) => {
   const f = fixture();
-  mutate(f.content, f.catalog);
-  return validate(f.content, f.catalog);
+  mutate(f.content, f.catalog, f.overview);
+  return validate(f.content, f.catalog, undefined, f.overview);
 };
 const rejects = (name, mutate, pattern) =>
   test(name, () => {
@@ -166,7 +171,7 @@ rejects(
 rejects(
   'a model mesh with no structure entry',
   (c, cat) => {
-    cat.push({ id: 'MESH_C', group: 'ring' });
+    cat.push({ id: 'MESH_C', group: 'ring', model: 'm1' });
   },
   /MESH_C has no structure entry/,
 );
@@ -234,4 +239,25 @@ rejects(
     c.structures[0].region = 'thumb';
   },
   /region "thumb" but mesh MESH_A is in model group "ring"/,
+);
+rejects(
+  'an overview node in an unknown region',
+  (c, cat, ov) => {
+    ov.push({ id: 'OV_X', region: 'tail' });
+  },
+  /overview node OV_X: unknown region "tail"/,
+);
+rejects(
+  'a region page pointing at a missing model',
+  (c) => {
+    c.regions[0].detail.model = 'nope';
+  },
+  /model "nope" has no catalog/,
+);
+rejects(
+  'a region page framing a group the model lacks',
+  (c) => {
+    c.regions[0].detail.frame = ['tail'];
+  },
+  /has no group "tail"/,
 );

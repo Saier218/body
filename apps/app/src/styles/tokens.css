@@ -41,6 +41,9 @@
   --c-layer-muscle: #b0473f;
   --c-layer-fascia: #c9a77a;
   --c-layer-pulley: #4f9fc9;
+  /* 全身概览中尚无内容的部位（决策 0011） */
+  --c-idle-bone: #4a5463;
+  --c-idle-muscle: #323b48;
 
   /* 颜色：角色标签 */
   --c-role-prime-bg: #86d3e8;

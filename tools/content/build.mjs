@@ -2,10 +2,10 @@
 // Drafts are left out: only entries that are at least "sourced" may reach users (CLAUDE.md 5.3).
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT, loadContent, loadModelCatalogs, validate } from './lib.mjs';
+import { ROOT, loadContent, loadModelCatalogs, loadOverviewCatalogs, validate } from './lib.mjs';
 
 const content = loadContent();
-const errors = validate(content, loadModelCatalogs());
+const errors = validate(content, loadModelCatalogs(), undefined, loadOverviewCatalogs());
 if (errors.length) {
   for (const e of errors) console.log('FAIL ' + e);
   process.exit(1);
@@ -25,6 +25,7 @@ for (const s of content.structures) for (const m of s.meshes) meshIndex[m.id] = 
 
 const bundle = {
   structures: Object.fromEntries(content.structures.map((s) => [s.id, s])),
+  regions: content.regions,
   meshIndex,
   sports: content.sports,
   injuries: Object.fromEntries(injuries.map((i) => [i.id, i])),

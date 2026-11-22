@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const out = resolve(root, 'apps/app/public/models');
 mkdirSync(out, { recursive: true });
-for (const f of ['hand_right.glb', 'hand_right.catalog.json']) {
+for (const f of ['hand_right.glb', 'hand_right.catalog.json', 'body_overview.glb', 'body_overview.regions.json']) {
   cpSync(resolve(root, 'models/generated', f), resolve(out, f));
 }
 console.log('models synced to apps/app/public/models');

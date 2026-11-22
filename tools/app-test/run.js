@@ -49,36 +49,48 @@ server.listen(0, '127.0.0.1', async () => {
     });
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
     const title = () => page.textContent('#sheet-title');
-    await page.waitForFunction(() => document.querySelector('#sheet-title')?.textContent === '点一下任意结构', { timeout: 60000 });
-    check('model loads on the body tab and the prompt is in Chinese', true);
+    const heading = () => page.textContent('#body-title');
+    await page.waitForFunction(() => document.querySelector('#sheet-title')?.textContent === '点亮色部位进入', { timeout: 60000 });
+    check('the first screen is the whole-body overview', (await heading()) === '全身' && !(await page.isVisible('.layers')));
+    if (shots) await page.screenshot({ path: path.join(shots, 'app-overview.png') });
+
+    // Tapping the body: every hit either opens a region page or explains that the region is in preparation.
+    const box = await page.locator('#gl').boundingBox();
+    let notice = false;
+    for (const [fx, fy] of [
+      [0.5, 0.35],
+      [0.47, 0.6],
+      [0.53, 0.6],
+      [0.5, 0.45],
+      [0.46, 0.8],
+    ]) {
+      await page.touchscreen.tap(box.x + box.width * fx, box.y + box.height * fy);
+      await page.waitForTimeout(150);
+      if ((await page.textContent('#sheet .sheet__hint')) === '该部位的内容正在整理中') {
+        notice = true;
+        break;
+      }
+    }
+    check('tapping a grey region says it is in preparation', notice && (await heading()) === '全身', await title());
+
+    await page.tap('#list-open');
+    const regionRows = await page.locator('.listview [data-region]').count();
+    check('the region list offers every region without 3D', regionRows >= 16, `${regionRows} rows`);
+    await page.tap('[data-region="hand:left"]');
+    await page.waitForFunction(() => document.querySelector('#body-title')?.textContent === '左手', { timeout: 10000 });
     check(
-      'left hand is the default',
-      (await page.getAttribute('.side', 'aria-checked')) === 'false' && (await page.textContent('.crumbs')) === '左手',
+      'choosing the left hand opens its region page',
+      (await page.getAttribute('.side', 'aria-checked')) === 'false' && (await page.isVisible('.layers')),
     );
-    const canvasPng = () => page.locator('#gl').screenshot();
-    const leftShot = await canvasPng();
+    const leftShot = await page.locator('#gl').screenshot();
     if (shots) await page.screenshot({ path: path.join(shots, 'app-left.png') });
 
-    await page.tap('.side');
-    await page.waitForTimeout(300);
-    const rightShot = await canvasPng();
-    check(
-      'the switch shows the right hand',
-      (await page.getAttribute('.side', 'aria-checked')) === 'true' &&
-        (await page.textContent('.crumbs')) === '右手' &&
-        !leftShot.equals(rightShot),
-    );
-    if (shots) await page.screenshot({ path: path.join(shots, 'app-right.png') });
-    await page.tap('.side');
-    await page.waitForTimeout(300);
-
-    // Tap a grid of points over the canvas until one hits a structure. Done on the mirrored (left) hand,
-    // which also proves that picking still works on mirrored geometry.
-    const box = await page.locator('#gl').boundingBox();
+    // Within the region: tap until a structure is selected (on the mirrored left hand, so picking on mirrored geometry is tested).
+    const rbox = await page.locator('#gl').boundingBox();
     let hit = false;
     for (const fy of [0.5, 0.6, 0.4, 0.7, 0.3]) {
       for (const fx of [0.5, 0.45, 0.55, 0.4, 0.6]) {
-        await page.touchscreen.tap(box.x + box.width * fx, box.y + box.height * fy);
+        await page.touchscreen.tap(rbox.x + rbox.width * fx, rbox.y + rbox.height * fy);
         await page.waitForTimeout(120);
         if ((await title()) !== '点一下任意结构') {
           hit = true;
@@ -89,36 +101,38 @@ server.listen(0, '127.0.0.1', async () => {
     }
     const name = await title();
     check('tapping the left hand selects a structure with a Chinese name', hit && /[一-鿿]/.test(name), name);
-    const crumbs = await page.textContent('.crumbs');
-    check(
-      'breadcrumb shows hand › region › structure',
-      crumbs.startsWith('左手') && crumbs.endsWith(name) && crumbs.length > 2 + name.length,
-      crumbs,
-    );
     check('region fact is shown', /所在分区/.test(await page.textContent('#sheet')));
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(450);
     if (shots) await page.screenshot({ path: path.join(shots, 'app-selected.png') });
 
-    await page.tap('#crumb-group');
-    check('the region crumb clears the selection', (await title()) === '点一下任意结构');
-    await page.tap('#crumb-root');
-    check('the hand crumb returns to the overview', (await page.textContent('.crumbs')) === '左手');
+    await page.tap('.side');
+    await page.waitForTimeout(300);
+    check(
+      'the side switch flips to the right hand and keeps the selection',
+      (await heading()) === '右手' && (await title()) === name && !leftShot.equals(await page.locator('#gl').screenshot()),
+    );
+    if (shots) await page.screenshot({ path: path.join(shots, 'app-right.png') });
+    await page.tap('.side');
+    await page.tap('#card-close');
+    check('closing the card clears the selection', (await title()) === '点一下任意结构');
 
     await page.tap('#list-open');
     const rows = await page.locator('.listview .row').count();
-    check('list view offers the structures of the hand without 3D', rows > 20, `${rows} rows`);
+    check('the structure list offers the hand without 3D', rows > 20, `${rows} rows`);
     const firstRow = page.locator('.listview .row').first();
     const rowName = await firstRow.locator('.row__title').textContent();
     await firstRow.tap();
     await page.waitForTimeout(450);
     check('choosing from the list selects that structure', (await page.isHidden('#listview')) && (await title()) === rowName, rowName);
-    await page.tap('#crumb-root');
 
     await page.tap('.layers [data-kind="muscle"]');
     check('layer toggle reflects state', (await page.getAttribute('.layers [data-kind="muscle"]', 'aria-pressed')) === 'false');
     await page.waitForTimeout(150);
     if (shots) await page.screenshot({ path: path.join(shots, 'app-no-muscle.png') });
     await page.tap('.layers [data-kind="muscle"]');
+    await page.tap('#back');
+    await page.waitForFunction(() => document.querySelector('#body-title')?.textContent === '全身', { timeout: 5000 });
+    check('the back button returns to the whole body', !(await page.isVisible('.layers')));
 
     await page.tap('[data-tab="moves"]');
     check(
