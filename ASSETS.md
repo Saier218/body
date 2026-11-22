@@ -13,3 +13,5 @@
 | brotli 1.2.1（Python） | 模型压缩，不随产品分发 | PyPI | Google | MIT | 是 | 不分发则无 | 无 | 2026-11-15 | |
 | Capacitor 8.6.0（core、ios、android、cli） | 把网页界面包成原生 App；运行时随产品分发 | https://github.com/ionic-team/capacitor | Ionic | MIT | 是 | 保留版权声明 | 无 | 2026-11-16 | `ios/`、`android/` 由其模板生成 |
 | Vite 8.3.5 | 构建工具，不随产品分发 | https://github.com/vitejs/vite | Vite 团队 | MIT | 是 | 不分发则无 | 无 | 2026-11-16 | |
+| React 19.1.10、react-dom 19.1.10 | 界面框架，随产品分发 | https://github.com/facebook/react | Meta Platforms | MIT | 是 | 保留版权声明 | 无 | 2026-11-22 | 决策 0006 |
+| @vitejs/plugin-react 6.2.1、@types/react 19.1.17、@types/react-dom 19.1.11 | 构建插件与类型定义，不随产品分发 | npm | Vite 团队 / DefinitelyTyped | MIT | 是 | 不分发则无 | 无 | 2026-11-22 | |

@@ -42,7 +42,23 @@ export interface ViewerOptions {
   width: number;
   height: number;
   pixelRatio: number;
-  background?: number;
+  /** clear colour; null makes the canvas transparent so the host page's background shows through */
+  background?: number | null;
+  /** surface colour per structure kind, so the host's design tokens drive the model too */
+  colors?: Record<string, number>;
+  /** tint added to the selected structure */
+  selectColor?: number;
+}
+
+export interface FocusOptions {
+  /** groups the camera should fit; null fits the whole model */
+  frame: string[] | null;
+  /** group kept at full brightness while the rest is dimmed; null dims nothing */
+  highlight: string | null;
+  /** only these structure kinds count when fitting the camera (long muscles can stretch a region's bounds) */
+  frameKinds?: string[];
+  /** jump without the camera animation */
+  instant?: boolean;
 }
 
 export interface TouchPoint {
@@ -57,13 +73,14 @@ export interface ViewerStats {
   drawCalls: number;
 }
 
-const KIND_COLOR: Record<string, number> = {
+const DEFAULT_COLORS: Record<string, number> = {
   bone: 0xe8dfc8,
   muscle: 0xb5483e,
   fascia: 0xd9d2c0,
   pulley: 0x8fc4dd,
 };
-const SELECT_EMISSIVE = 0x996b00;
+const DEFAULT_SELECT = 0x996b00;
+const SELECT_INTENSITY = 0.6;
 const DIM = 0.28;
 const TAP_MOVE_PX = 8;
 const TAP_MS = 350;
@@ -104,9 +121,12 @@ export class Viewer {
   private disposed = false;
   private bench: { until: number; frames: number; start: number; done: (fps: number) => void } | null = null;
 
-  private selected: string | null = null;
+  private selected = new Set<string>();
   private focused: string | null = null;
   private hiddenKinds = new Set<string>();
+  private colors: Record<string, number>;
+  private selectColor: number;
+  private mirrored = false;
 
   /** called with the picked structure id (or null) when the user taps */
   onTap: (id: string | null) => void = () => {};
@@ -115,7 +135,10 @@ export class Viewer {
     this.canvas = opts.canvas;
     this.width = opts.width;
     this.height = opts.height;
-    const gl = opts.canvas.getContext('webgl2', { antialias: true, alpha: false, powerPreference: 'high-performance' }) as {
+    this.colors = { ...DEFAULT_COLORS, ...opts.colors };
+    this.selectColor = opts.selectColor ?? DEFAULT_SELECT;
+    const transparent = opts.background === null;
+    const gl = opts.canvas.getContext('webgl2', { antialias: true, alpha: transparent, powerPreference: 'high-performance' }) as {
       VERSION: number;
       getParameter(p: number): unknown;
     } | null;
@@ -144,7 +167,8 @@ export class Viewer {
     this.renderer = new WebGLRenderer({ canvas: facade as unknown as never, context: gl as unknown as never, antialias: true });
     this.renderer.setPixelRatio(opts.pixelRatio);
     this.renderer.setSize(opts.width, opts.height, false);
-    this.scene.background = new Color(opts.background ?? 0x15171c);
+    if (transparent) this.renderer.setClearColor(0x000000, 0);
+    else this.scene.background = new Color(opts.background ?? 0x15171c);
     this.camera = new PerspectiveCamera(32, opts.width / opts.height, 1, 5000);
     this.scene.add(new HemisphereLight(0xffffff, 0x39424e, 1.25));
     const key = new DirectionalLight(0xffffff, 2.0);
@@ -163,8 +187,8 @@ export class Viewer {
       geo.setIndex(new BufferAttribute(m.indices, 1));
       geo.computeVertexNormals();
       geo.computeBoundingSphere();
-      const base = new Color(KIND_COLOR[entry.kind] ?? 0x999999);
-      const mat = new MeshStandardMaterial({ color: base.clone(), roughness: 0.62, metalness: 0 });
+      const base = new Color(this.colors[entry.kind] ?? 0x999999);
+      const mat = new MeshStandardMaterial({ color: base.clone(), roughness: 0.62, metalness: 0, emissiveIntensity: SELECT_INTENSITY });
       const mesh = new Mesh(geo, mat);
       mesh.name = entry.id;
       this.scene.add(mesh);
@@ -244,23 +268,76 @@ export class Viewer {
     return this.items.get(id)?.entry ?? null;
   }
 
-  select(id: string | null): void {
-    this.selected = id;
+  /** highlight one or more meshes (a structure can span several); null clears the selection */
+  select(ids: string | string[] | null): void {
+    this.selected = new Set(ids === null ? [] : Array.isArray(ids) ? ids : [ids]);
     this.restyle();
   }
 
-  /** zoom to one group of structures and dim the rest; null returns to the overview */
-  focusGroup(group: string | null): void {
-    this.focused = group;
-    const b = this.boundsOf((e) => group === null || e.group === group);
-    this.goal = {
-      target: b.center,
-      radius: this.fitRadius(b.radius),
-      from: this.target.clone(),
-      fromRadius: this.radius,
-      start: Date.now(),
-    };
+  /** move the camera to fit some groups and optionally dim everything outside one group */
+  focus(opts: FocusOptions): void {
+    this.focused = opts.highlight;
+    const frame = opts.frame;
+    const inFrame = (e: CatalogEntry) => frame === null || frame.includes(e.group);
+    const kinds = opts.frameKinds;
+    const inFrameOfKind = (e: CatalogEntry) => inFrame(e) && (!kinds || kinds.includes(e.kind));
+    // fall back to every kind when the region has none of the requested ones
+    const b = this.boundsOf(this.some(inFrameOfKind) ? inFrameOfKind : inFrame);
+    const radius = this.fitRadius(b.radius);
+    if (opts.instant) {
+      this.goal = null;
+      this.target.copy(b.center);
+      this.radius = radius;
+    } else {
+      this.goal = { target: b.center, radius, from: this.target.clone(), fromRadius: this.radius, start: Date.now() };
+    }
     this.restyle();
+  }
+
+  /** zoom to one group of structures and dim the rest; null returns to the overview (kept for the frozen mini program) */
+  focusGroup(group: string | null): void {
+    this.focus({ frame: group === null ? null : [group], highlight: group });
+  }
+
+  /**
+   * Show the mirror image of the loaded model (a right hand becomes a left hand). The geometry is
+   * mirrored in place, with triangle winding reversed so faces, lighting and picking stay correct,
+   * and the camera is mirrored with it so the view stays the same, just flipped.
+   */
+  setMirrored(mirrored: boolean): void {
+    if (mirrored === this.mirrored) return;
+    this.mirrored = mirrored;
+    this.items.forEach((it) => {
+      const geo = it.mesh.geometry;
+      const pos = geo.getAttribute('position') as BufferAttribute;
+      const p = pos.array as Float32Array;
+      for (let i = 0; i < p.length; i += 3) p[i] = -p[i];
+      pos.needsUpdate = true;
+      const index = geo.getIndex();
+      if (index) {
+        const ix = index.array;
+        for (let i = 0; i < ix.length; i += 3) {
+          const t = ix[i + 1];
+          ix[i + 1] = ix[i + 2];
+          ix[i + 2] = t;
+        }
+        index.needsUpdate = true;
+      }
+      geo.computeVertexNormals();
+      geo.computeBoundingBox();
+      geo.computeBoundingSphere();
+    });
+    this.target.x = -this.target.x;
+    this.theta = -this.theta;
+    if (this.goal) {
+      this.goal.target.x = -this.goal.target.x;
+      this.goal.from.x = -this.goal.from.x;
+    }
+    this.invalidate();
+  }
+
+  isMirrored(): boolean {
+    return this.mirrored;
   }
 
   setKindVisible(kind: string, visible: boolean): void {
@@ -309,9 +386,14 @@ export class Viewer {
       it.mesh.visible = !this.hiddenKinds.has(it.entry.kind);
       const dim = this.focused !== null && it.entry.group !== this.focused;
       it.mesh.material.color.copy(it.base).multiplyScalar(dim ? DIM : 1);
-      it.mesh.material.emissive.setHex(id === this.selected ? SELECT_EMISSIVE : 0x000000);
+      it.mesh.material.emissive.setHex(this.selected.has(id) ? this.selectColor : 0x000000);
     });
     this.invalidate();
+  }
+
+  private some(filter: (e: CatalogEntry) => boolean): boolean {
+    for (const it of this.items.values()) if (filter(it.entry)) return true;
+    return false;
   }
 
   private boundsOf(filter: (e: CatalogEntry) => boolean): Sphere {

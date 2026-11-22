@@ -1,25 +1,70 @@
 /** All interface text goes through this table; screens never hard-code a language. */
-export type Lang = 'zh' | 'en';
+import { createContext, useContext } from 'react';
+import type { Lang } from './content';
+
+export type { Lang };
 
 const TEXT = {
+  tab_body: { zh: '身体', en: 'Body' },
+  tab_moves: { zh: '动作', en: 'Moves' },
+  tab_injuries: { zh: '损伤', en: 'Injuries' },
+  tab_me: { zh: '我的', en: 'Me' },
+  nav_main: { zh: '主导航', en: 'Main navigation' },
+  crumbs: { zh: '当前层级', en: 'Where you are' },
+  hand_left: { zh: '左手', en: 'Left hand' },
+  hand_right: { zh: '右手', en: 'Right hand' },
+  side_switch: { zh: '显示右手', en: 'Show right hand' },
+  side_left: { zh: '左', en: 'L' },
+  side_right: { zh: '右', en: 'R' },
+  layers: { zh: '显示图层', en: 'Layers' },
+  list_view: { zh: '列表', en: 'List' },
+  list_title: { zh: '当前范围内的结构', en: 'Structures in view' },
+  list_hidden_layer: { zh: '图层已隐藏', en: 'layer hidden' },
+  close: { zh: '关闭', en: 'Close' },
+  hint_title: { zh: '点一下任意结构', en: 'Tap any structure' },
+  hint_gestures: { zh: '单指旋转 · 双指缩放和平移', en: 'One finger rotates · two fingers zoom and pan' },
   loading: { zh: '正在加载模型…', en: 'Loading model…' },
-  ready: { zh: '点一下任意结构', en: 'Tap any structure' },
-  back: { zh: '返回全貌', en: 'Back to overview' },
-  benchmark: { zh: '跑性能测试', en: 'Run benchmark' },
-  benchmarking: { zh: '测试中…', en: 'Measuring…' },
-  lang: { zh: 'English', en: '中文' },
-  diagnostics: { zh: '诊断信息', en: 'Diagnostics' },
-  group: { zh: '所在分区', en: 'Region' },
-  incidence: { zh: '文献出现率', en: 'Reported incidence' },
   err_webgl2: {
     zh: '此设备不支持 WebGL2，无法显示 3D 模型。',
     en: 'This device does not support WebGL2, so the 3D model cannot be shown.',
   },
   err_load: { zh: '模型加载失败', en: 'The model failed to load' },
-  credit: {
+  region: { zh: '所在分区', en: 'Region' },
+  incidence: { zh: '文献出现率', en: 'Reported incidence' },
+  related_injuries: { zh: '相关损伤', en: 'Related injuries' },
+  related_moves: { zh: '相关动作', en: 'Related moves' },
+  credit_short: { zh: '模型：BodyParts3D © DBCLS，CC BY 4.0', en: 'Model: BodyParts3D © DBCLS, CC BY 4.0' },
+  placeholder_moves: { zh: '动作库', en: 'Moves' },
+  placeholder_injuries: { zh: '损伤', en: 'Injuries' },
+  placeholder_body: {
+    zh: '内容正在对照文献整理，首批条目经人工审阅后上线。',
+    en: 'Entries are being written against the literature and will appear once a person has reviewed them.',
+  },
+  me_language: { zh: '语言', en: 'Language' },
+  me_about: { zh: '关于与致谢', en: 'About and credits' },
+  me_disclaimer: {
+    zh: '本内容为运动科普，不能替代医生的面诊与判断。',
+    en: 'This is sports education and cannot replace an in-person assessment by a doctor.',
+  },
+  me_credit: {
     zh: '解剖底模：BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International',
     en: 'Base anatomy: BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International',
   },
+  me_mirror: {
+    zh: '左手模型是右手模型的镜像，两侧结构完全对称；真实人体两侧会有细微差异。',
+    en: 'The left hand is a mirror image of the right-hand model, so both sides are identical; real bodies differ slightly between sides.',
+  },
+  me_pulleys: {
+    zh: '滑车由本项目依据解剖文献的测量数据建模，位置为推算，尚待专业人士确认。',
+    en: 'The pulleys were modelled by this project from published measurements; their positions are derived and await professional review.',
+  },
+  me_diag: { zh: '诊断与性能测试', en: 'Diagnostics and benchmark' },
+  me_diag_hint: {
+    zh: '测试时会回到身体页并旋转模型约 4 秒。',
+    en: 'The test returns to the Body tab and spins the model for about 4 seconds.',
+  },
+  bench_run: { zh: '运行性能测试', en: 'Run benchmark' },
+  benchmarking: { zh: '测试中…', en: 'Measuring…' },
   kind_bone: { zh: '骨骼', en: 'Bones' },
   kind_muscle: { zh: '肌肉与肌腱', en: 'Muscles & tendons' },
   kind_fascia: { zh: '筋膜', en: 'Fascia' },
@@ -41,6 +86,14 @@ export function t(key: TextKey, lang: Lang): string {
 }
 
 export function tDynamic(prefix: 'kind' | 'group', name: string, lang: Lang): string {
-  const entry = (TEXT as Record<string, { zh: string; en: string }>)[prefix + '_' + name];
+  const entry = (TEXT as Record<string, { zh: string; en: string }>)[`${prefix}_${name}`];
   return entry ? entry[lang] : name;
+}
+
+export const LangContext = createContext<Lang>('zh');
+
+/** Returns a translator bound to the current language. */
+export function useT(): { lang: Lang; t: (key: TextKey) => string; td: (prefix: 'kind' | 'group', name: string) => string } {
+  const lang = useContext(LangContext);
+  return { lang, t: (key) => t(key, lang), td: (prefix, name) => tDynamic(prefix, name, lang) };
 }
