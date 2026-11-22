@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>损伤首页 · 方案一 部位目录</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="o1.css">
+</head>
+<body class="screen">
+<div class="sim-status" aria-hidden="true">9:41</div>
+<header class="pagehead">
+  <h1>损伤</h1>
+  <span class="sample">示例文字</span>
+</header>
+
+<main class="main">
+  <label class="search">
+    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5L20 20"/></svg>
+    <span class="vh">搜索损伤或结构</span>
+    <input type="search" placeholder="搜索损伤名称或结构，如“滑车”">
+  </label>
+
+  <p class="lede">按部位浏览：这是一份目录，列出文献中常见于各部位的攀岩损伤，不会推断你属于哪一种。</p>
+
+  <div class="atlas">
+    <div class="atlas__fig">
+      <div class="seg2" role="group" aria-label="人体朝向">
+        <button type="button" aria-pressed="true">正面</button>
+        <button type="button" aria-pressed="false">背面</button>
+      </div>
+      <svg class="bodymap" viewBox="0 0 140 300" role="img" aria-label="人体示意图，正面。手指、手掌与手腕、前臂与肘、肩为亮色，可点；其余部位灰色，内容整理中">
+        <defs>
+          <g id="o1-half">
+            <ellipse class="bm-on" cx="44" cy="60" rx="11" ry="10"/>
+            <rect class="bm-off" x="33" y="70" width="13" height="48" rx="6" transform="rotate(8 39.5 70)"/>
+            <rect class="bm-on" x="27" y="120" width="12" height="48" rx="6" transform="rotate(5 33 120)"/>
+            <rect class="bm-on" x="22" y="170" width="13" height="15" rx="4" transform="rotate(3 28.5 170)"/>
+            <rect class="bm-on" x="21.5" y="187" width="13" height="15" rx="3" transform="rotate(3 28.5 170)"/>
+            <rect class="bm-off" x="51" y="160" width="17" height="116" rx="8" transform="rotate(2 59.5 160)"/>
+            <ellipse class="bm-off" cx="55" cy="282" rx="10" ry="6"/>
+          </g>
+        </defs>
+        <path class="bm-off" d="M50 54 Q70 48 90 54 L91 166 L49 166 Z"/>
+        <rect class="bm-off" x="64" y="38" width="12" height="14"/>
+        <ellipse class="bm-off" cx="70" cy="24" rx="14" ry="17"/>
+        <use href="#o1-half"/>
+        <use href="#o1-half" transform="translate(140 0) scale(-1 1)"/>
+      </svg>
+      <p class="bodymap__cap">点亮色部位或右侧列表</p>
+    </div>
+
+    <nav class="regions" aria-label="部位列表">
+      <p class="regions__group">上肢</p>
+      <ul class="rlist">
+        <li><a class="ritem" href="results.html"><span class="ritem__dot"></span><span class="ritem__name">手指</span><span class="ritem__n">x 条</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        <li><a class="ritem" href="#"><span class="ritem__dot"></span><span class="ritem__name">手掌与手腕</span><span class="ritem__n">x 条</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        <li><a class="ritem" href="#"><span class="ritem__dot"></span><span class="ritem__name">前臂与肘</span><span class="ritem__n">x 条</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        <li><a class="ritem" href="#"><span class="ritem__dot"></span><span class="ritem__name">肩</span><span class="ritem__n">x 条</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+      </ul>
+      <p class="regions__group">其他部位</p>
+      <ul class="rlist">
+        <li><span class="ritem ritem--off"><span class="ritem__dot"></span><span class="ritem__name">颈与背</span><span class="ritem__n">整理中</span></span></li>
+        <li><span class="ritem ritem--off"><span class="ritem__dot"></span><span class="ritem__name">髋与膝</span><span class="ritem__n">整理中</span></span></li>
+        <li><span class="ritem ritem--off"><span class="ritem__dot"></span><span class="ritem__name">踝与足</span><span class="ritem__n">整理中</span></span></li>
+      </ul>
+    </nav>
+  </div>
+
+  <a class="care" href="#red-flags">
+    <span class="care__ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3zM12 10v5M12 17.6h.01"/></svg></span>
+    <span class="care__main">
+      <span class="care__title">什么时候应该尽快就医</span>
+      <span class="care__sub">受伤后出现哪些情况需要尽快线下就诊，先看这里</span>
+    </span>
+    <svg class="ico care__go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
+
+  <a class="azlink" href="#">
+    <span class="azlink__k">A–Z</span>
+    <span class="azlink__v">全部损伤（按名称排列）</span>
+    <svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
+</main>
+
+<footer class="dock">
+  <p class="disclaimer"><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg><span>本内容为运动科普，不能替代医生的面诊与判断</span></p>
+  <nav class="tabbar" aria-label="主导航">
+    <a class="tab" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4.8" r="2.3"/><path d="M5 10.5h14M12 8v8M12 16l-4 5.5M12 16l4 5.5"/></svg><span class="tab__label">身体</span></a>
+    <a class="tab" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14.5l3-8 7.5-2 3.5 5.5-2 7.5-8 2z"/><circle cx="12" cy="12" r="1.6"/></svg><span class="tab__label">动作</span></a>
+    <a class="tab" href="home.html" aria-current="page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4.5l2.5-6 4 12 2.5-6H21"/></svg><span class="tab__label">损伤</span></a>
+    <a class="tab" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/></svg><span class="tab__label">我的</span></a>
+  </nav>
+  <div class="home-ind" aria-hidden="true"></div>
+</footer>
+</body>
+</html>

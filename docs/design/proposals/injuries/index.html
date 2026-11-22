@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>损伤标签首页 · 两个方案</title>
+<style>
+  :root { --pg-bg: #e9e9e6; --pg-text: #1f2328; --pg-muted: #4a515a; --pg-frame: #111417; --pg-card: #ffffff; --pg-link: #0b4f6c; --pg-warn: #8a2a20; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px 24px 64px; background: var(--pg-bg); color: var(--pg-text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Segoe UI", Roboto, sans-serif; }
+  header, .opts { max-width: 1760px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  p { margin: 0 0 8px; color: var(--pg-muted); max-width: 900px; }
+  a { color: var(--pg-link); }
+  .opts { display: grid; grid-template-columns: repeat(2, auto); gap: 40px; justify-content: center; margin-top: 28px; }
+  .opt { background: var(--pg-card); border-radius: 16px; padding: 20px 24px 24px; }
+  .opt h2 { margin: 0 0 4px; font-size: 20px; }
+  .opt > p { font-size: 15px; max-width: 840px; }
+  .pair { display: grid; grid-template-columns: repeat(2, 410px); gap: 24px; margin-top: 16px; }
+  figure { margin: 0; }
+  figcaption { font-size: 14px; color: var(--pg-muted); margin: 0 0 8px 12px; }
+  .phone { width: 410px; height: 864px; border: 10px solid var(--pg-frame); border-radius: 48px; overflow: hidden; background: var(--pg-frame); }
+  .phone iframe { width: 390px; height: 844px; border: 0; display: block; }
+  .note { font-size: 14px; color: var(--pg-warn); }
+  @media (max-width: 1800px) { .opts { grid-template-columns: auto; } }
+  @media (max-width: 900px) { .pair { grid-template-columns: 410px; justify-content: center; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>损伤标签首页："哪里不舒服"怎么进入，请选一个方案</h1>
+  <p>两个方案在<strong>结构</strong>上不同：方案一以部位目录为主；方案二以攀岩情境为主、部位为辅。视觉都沿用方向 A 的设计变量。每个手机框（390×844）里的页面都可以滚动。</p>
+  <p>页面里的条目名称、数量和日期都是<strong>示例文字</strong>，不是医学内容。A2 滑车损伤目前仍是草稿，正式上线前不会出现在列表里。点列表中的 A2 会打开已有的详情页样稿。</p>
+  <p>说明、合规考虑、优缺点和我的建议见 <a href="README.md">README.md</a>；调研见 <a href="../../research/2026-11-23-injury-browsing.md">2026-11-23-injury-browsing.md</a>。</p>
+</header>
+
+<div class="opts">
+  <section class="opt">
+    <h2>方案一 · 部位目录</h2>
+    <p>首页：小号人体图（正面 / 背面）和部位列表并排，两者等价；下方是"什么时候应该尽快就医"卡片和 A–Z 全部列表。结果页：先说明"这是目录，不是判断"，再列出该部位的条目，可按结构类型筛选。</p>
+    <div class="pair">
+      <figure><figcaption>① 损伤首页</figcaption><div class="phone"><iframe src="option-1/home.html" title="方案一：损伤首页"></iframe></div></figure>
+      <figure><figcaption>② 选了"手指"之后</figcaption><div class="phone"><iframe src="option-1/results.html" title="方案一：手指结果页"></iframe></div></figure>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>方案二 · 攀岩情境入口</h2>
+    <p>首页：先是就医卡片，再按四种攀岩情境进入（小点受力、摔落、肩部过顶、长期训练），部位网格在下方。结果页：同一部位的条目按"文献描述的发生情境"分组，可切换为按名称排列。</p>
+    <div class="pair">
+      <figure><figcaption>① 损伤首页</figcaption><div class="phone"><iframe src="option-2/home.html" title="方案二：损伤首页"></iframe></div></figure>
+      <figure><figcaption>② 选了"手指"之后</figcaption><div class="phone"><iframe src="option-2/results.html" title="方案二：手指结果页"></iframe></div></figure>
+    </div>
+  </section>
+</div>
+</body>
+</html>

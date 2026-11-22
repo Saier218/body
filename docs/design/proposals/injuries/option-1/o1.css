@@ -1,0 +1,50 @@
+/* 方案一「部位目录」专用样式 */
+
+.lede { padding: var(--sp-3) var(--gutter) 0; font-size: var(--fs-sm); color: var(--c-text-2); line-height: 1.5; }
+
+.atlas { display: grid; grid-template-columns: 132px 1fr; gap: var(--sp-3); padding: var(--sp-3) var(--gutter) 0; }
+.atlas__fig { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); }
+
+.seg2 { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border: var(--bw) solid var(--c-line-strong); border-radius: var(--r-sm); overflow: hidden; }
+.seg2 button { min-height: 36px; font-size: var(--fs-xs); color: var(--c-text-2); }
+.seg2 button + button { border-left: var(--bw) solid var(--c-line-strong); }
+.seg2 button[aria-pressed="true"] { color: var(--c-text); background: var(--c-surface-2); font-weight: var(--fw-bold); box-shadow: inset 0 -2px 0 var(--c-accent); }
+
+.bodymap { width: 120px; height: 258px; display: block; }
+.bm-off { fill: var(--c-surface-2); stroke: var(--c-line-strong); stroke-width: 1; }
+.bm-on { fill: var(--c-accent-soft); stroke: var(--c-accent); stroke-width: 1.5; }
+.bm-on--sel { fill: var(--c-accent); }
+.bm-hit { fill: none; stroke: none; } /* 隐形的大点击区，样稿不显示 */
+.bodymap__cap { font: var(--fs-2xs)/1.3 var(--font-label); color: var(--c-text-3); text-align: center; }
+
+.regions__group { font: var(--fs-2xs)/1 var(--font-label); letter-spacing: var(--ls-label); color: var(--c-text-3); padding: var(--sp-1) 0 var(--sp-2); }
+.regions__group + .rlist { margin-bottom: var(--sp-3); }
+.rlist { border-top: var(--bw) solid var(--c-line); }
+.rlist li { border-bottom: var(--bw) solid var(--c-line); }
+.ritem { display: flex; align-items: center; gap: var(--sp-2); min-height: 48px; }
+.ritem__dot { width: 8px; height: 8px; flex: none; background: var(--c-accent); border-radius: var(--r-xs); }
+.ritem__name { flex: 1; font-size: var(--fs-md); font-weight: var(--fw-medium); }
+.ritem__n { font: var(--fs-xs)/1 var(--font-label); color: var(--c-text-2); }
+.ritem .ico { color: var(--c-text-3); }
+.ritem--off { min-height: 40px; }
+.ritem--off .ritem__dot { background: var(--c-line-strong); }
+.ritem--off .ritem__name { color: var(--c-text-3); font-weight: var(--fw-regular); font-size: var(--fs-sm); }
+.ritem--off .ritem__n { color: var(--c-text-3); font-size: var(--fs-2xs); }
+
+.azlink { display: flex; align-items: center; gap: var(--sp-3); min-height: 52px; margin: var(--sp-3) var(--gutter) var(--sp-5);
+  padding: 0 var(--sp-3); border: var(--bw) solid var(--c-line-strong); border-radius: var(--r-sm); }
+.azlink__k { font: var(--fs-xs)/1 var(--font-label); color: var(--c-accent-text); border: var(--bw) solid var(--c-accent); border-radius: var(--r-xs); padding: 4px; }
+.azlink__v { flex: 1; font-size: var(--fs-md); }
+.azlink .ico { color: var(--c-text-3); }
+
+/* 结果页 */
+.rhead { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-4) var(--gutter) 0; }
+.rhead__fig { width: 56px; height: 56px; flex: none; border: var(--bw) solid var(--c-line-strong); border-radius: var(--r-md);
+  background: radial-gradient(ellipse at 50% 45%, var(--c-viewport-1), var(--c-viewport-2)); display: flex; align-items: center; justify-content: center; }
+.rhead__fig svg { width: 40px; height: 48px; }
+.rhead__eyebrow { font: var(--fs-2xs)/1.3 var(--font-label); letter-spacing: var(--ls-label); color: var(--c-text-3); }
+.rhead h1 { font-size: var(--fs-xl); font-weight: var(--fw-bold); line-height: var(--lh-tight); margin-top: 2px; }
+.rhead__en { font: var(--fs-xs)/1.3 var(--font-label); color: var(--c-text-3); }
+.listhead { display: flex; align-items: baseline; justify-content: space-between; padding: var(--sp-4) var(--gutter) var(--sp-2); }
+.listhead__k { font-size: var(--fs-sm); color: var(--c-text-2); }
+.listhead__sort { font: var(--fs-2xs)/1 var(--font-label); color: var(--c-text-3); letter-spacing: var(--ls-label); }

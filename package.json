@@ -9,7 +9,6 @@
     "test:app": "node tools/app-test/run.js",
     "check": "npm run lint && npm run typecheck && npm run licenses && npm run test:content && npm run build && npm run budget && npm run test:app",
     "cap:sync": "npm run build && cap sync",
-    "build:core:miniprogram": "esbuild packages/viewer-core/src/index.ts --bundle --format=cjs --target=es2018 --minify --legal-comments=none --outfile=apps/miniprogram/libs/viewer-core.js",
     "test:contract": "node tools/contract-test/run.js",
     "content:validate": "node tools/content/validate.mjs",
     "content:build": "node tools/content/build.mjs",
@@ -17,7 +16,8 @@
     "lint": "eslint . && prettier --check \"apps/app/**/*.{ts,tsx,css,html}\" \"packages/**/*.ts\" \"tools/**/*.{js,mjs}\"",
     "format": "prettier --write \"apps/app/**/*.{ts,tsx,css,html}\" \"packages/**/*.ts\" \"tools/**/*.{js,mjs}\"",
     "licenses": "node tools/license-check.mjs",
-    "budget": "node tools/budget-check.mjs"
+    "budget": "node tools/budget-check.mjs",
+    "build:miniprogram": "npm run content:build && node tools/build-miniprogram.mjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.0",

@@ -1,6 +1,4 @@
 /** Shapes of the generated files the app loads. The source of truth is content/schema. */
-export type Lang = 'zh' | 'en';
-
 export interface Structure {
   id: string;
   name: { zh: string; en: string; la?: string };

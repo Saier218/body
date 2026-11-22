@@ -1,0 +1,41 @@
+/* 方案二「攀岩情境入口」专用样式 */
+
+.sits { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); padding: 0 var(--gutter); }
+.sit { display: flex; flex-direction: column; justify-content: space-between; gap: var(--sp-1); min-height: 80px;
+  padding: var(--sp-3); background: var(--c-surface); border: var(--bw) solid var(--c-line-strong); border-radius: var(--r-md); }
+.sit__ico { color: var(--c-accent); display: inline-flex; }
+.sit__title { font-size: var(--fs-md); font-weight: var(--fw-medium); line-height: var(--lh-tight); }
+.sit__n { display: flex; align-items: center; justify-content: space-between; font: var(--fs-2xs)/1 var(--font-label); color: var(--c-text-2); letter-spacing: var(--ls-label); }
+.sit__n .ico { color: var(--c-text-3); width: 16px; height: 16px; }
+
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-2); padding: 0 var(--gutter); }
+.tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 52px;
+  padding: var(--sp-1); text-align: center; border: var(--bw) solid var(--c-accent); border-radius: var(--r-sm);
+  font-size: var(--fs-sm); font-weight: var(--fw-medium); line-height: var(--lh-tight); }
+.tile__n { font: var(--fs-2xs)/1 var(--font-label); color: var(--c-text-2); font-weight: var(--fw-regular); }
+.tile--off { border-color: var(--c-line); color: var(--c-text-3); font-weight: var(--fw-regular); }
+.tile--off .tile__n { color: var(--c-text-3); }
+.tile--az { border-color: var(--c-line-strong); border-style: dashed; color: var(--c-accent-text); }
+
+.boundary { display: flex; gap: var(--sp-2); padding: var(--sp-3) var(--gutter) var(--sp-3); font-size: var(--fs-xs); color: var(--c-text-3); line-height: 1.5; }
+.boundary .ico { color: var(--c-text-3); margin-top: 1px; }
+
+/* 结果页 */
+.rtitle { padding: var(--sp-4) var(--gutter) 0; }
+.rtitle__eyebrow { font: var(--fs-2xs)/1.3 var(--font-label); letter-spacing: var(--ls-label); color: var(--c-text-3); }
+.rtitle h1 { font-size: var(--fs-xl); font-weight: var(--fw-bold); line-height: var(--lh-tight); margin-top: 2px; }
+.rtitle__en { font: var(--fs-xs)/1.3 var(--font-label); color: var(--c-text-3); }
+
+.groupby { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-4) var(--gutter) 0; }
+.groupby__k { font-size: var(--fs-sm); color: var(--c-text-2); flex: none; }
+.seg { flex: 1; display: grid; grid-template-columns: 1fr 1fr; border: var(--bw) solid var(--c-line-strong); border-radius: var(--r-sm); overflow: hidden; }
+.seg button { min-height: 40px; font-size: var(--fs-sm); color: var(--c-text-2); }
+.seg button + button { border-left: var(--bw) solid var(--c-line-strong); }
+.seg button[aria-pressed="true"] { color: var(--c-text); background: var(--c-surface-2); font-weight: var(--fw-bold); box-shadow: inset 0 -2px 0 var(--c-accent); }
+
+.group__head { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-5) var(--gutter) var(--sp-2); }
+.group__head .ico { color: var(--c-accent); }
+.group__head h2 { flex: 1; font-size: var(--fs-md); font-weight: var(--fw-bold); line-height: var(--lh-tight); }
+.group__n { font: var(--fs-2xs)/1 var(--font-label); color: var(--c-text-3); letter-spacing: var(--ls-label); }
+.group__note { padding: 0 var(--gutter) var(--sp-2); font-size: var(--fs-xs); color: var(--c-text-3); line-height: 1.45; }
+.also { font: var(--fs-2xs)/1 var(--font-label); color: var(--c-text-3); }

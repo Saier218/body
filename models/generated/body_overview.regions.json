@@ -4,7 +4,7 @@
   "region": "foot",
   "side": "left",
   "kind": "bone",
-  "faces": 448,
+  "faces": 268,
   "sources": 20
  },
  {
@@ -12,7 +12,7 @@
   "region": "foot",
   "side": "left",
   "kind": "muscle",
-  "faces": 710,
+  "faces": 426,
   "sources": 21
  },
  {
@@ -20,7 +20,7 @@
   "region": "foot",
   "side": "right",
   "kind": "bone",
-  "faces": 434,
+  "faces": 260,
   "sources": 20
  },
  {
@@ -28,7 +28,7 @@
   "region": "foot",
   "side": "right",
   "kind": "muscle",
-  "faces": 708,
+  "faces": 426,
   "sources": 21
  },
  {
@@ -44,7 +44,7 @@
   "region": "forearm",
   "side": "left",
   "kind": "muscle",
-  "faces": 1966,
+  "faces": 1180,
   "sources": 23
  },
  {
@@ -60,7 +60,7 @@
   "region": "forearm",
   "side": "right",
   "kind": "muscle",
-  "faces": 1966,
+  "faces": 1178,
   "sources": 23
  },
  {
@@ -68,7 +68,7 @@
   "region": "hand",
   "side": "left",
   "kind": "bone",
-  "faces": 346,
+  "faces": 240,
   "sources": 27
  },
  {
@@ -76,7 +76,7 @@
   "region": "hand",
   "side": "left",
   "kind": "muscle",
-  "faces": 240,
+  "faces": 238,
   "sources": 10
  },
  {
@@ -84,7 +84,7 @@
   "region": "hand",
   "side": "right",
   "kind": "bone",
-  "faces": 330,
+  "faces": 240,
   "sources": 27
  },
  {
@@ -100,7 +100,7 @@
   "region": "head-neck",
   "side": "mid",
   "kind": "bone",
-  "faces": 4838,
+  "faces": 2902,
   "sources": 30
  },
  {
@@ -108,7 +108,7 @@
   "region": "head-neck",
   "side": "mid",
   "kind": "muscle",
-  "faces": 6912,
+  "faces": 4146,
   "sources": 66
  },
  {
@@ -124,7 +124,7 @@
   "region": "lower-leg",
   "side": "left",
   "kind": "muscle",
-  "faces": 1270,
+  "faces": 762,
   "sources": 11
  },
  {
@@ -140,7 +140,7 @@
   "region": "lower-leg",
   "side": "right",
   "kind": "muscle",
-  "faces": 1270,
+  "faces": 762,
   "sources": 11
  },
  {
@@ -148,7 +148,7 @@
   "region": "pelvis",
   "side": "mid",
   "kind": "muscle",
-  "faces": 618,
+  "faces": 370,
   "sources": 5
  },
  {
@@ -156,7 +156,7 @@
   "region": "shoulder",
   "side": "left",
   "kind": "bone",
-  "faces": 992,
+  "faces": 596,
   "sources": 2
  },
  {
@@ -164,7 +164,7 @@
   "region": "shoulder",
   "side": "left",
   "kind": "muscle",
-  "faces": 540,
+  "faces": 324,
   "sources": 10
  },
  {
@@ -172,7 +172,7 @@
   "region": "shoulder",
   "side": "right",
   "kind": "bone",
-  "faces": 926,
+  "faces": 556,
   "sources": 2
  },
  {
@@ -180,7 +180,7 @@
   "region": "shoulder",
   "side": "right",
   "kind": "muscle",
-  "faces": 540,
+  "faces": 324,
   "sources": 10
  },
  {
@@ -196,7 +196,7 @@
   "region": "thigh",
   "side": "left",
   "kind": "muscle",
-  "faces": 2462,
+  "faces": 1478,
   "sources": 25
  },
  {
@@ -204,7 +204,7 @@
   "region": "thigh",
   "side": "right",
   "kind": "bone",
-  "faces": 522,
+  "faces": 312,
   "sources": 3
  },
  {
@@ -212,7 +212,7 @@
   "region": "thigh",
   "side": "right",
   "kind": "muscle",
-  "faces": 2462,
+  "faces": 1478,
   "sources": 25
  },
  {
@@ -220,7 +220,7 @@
   "region": "torso",
   "side": "mid",
   "kind": "bone",
-  "faces": 7256,
+  "faces": 4352,
   "sources": 40
  },
  {
@@ -228,7 +228,7 @@
   "region": "torso",
   "side": "mid",
   "kind": "muscle",
-  "faces": 20420,
+  "faces": 12252,
   "sources": 51
  },
  {
@@ -244,7 +244,7 @@
   "region": "upper-arm",
   "side": "left",
   "kind": "muscle",
-  "faces": 340,
+  "faces": 240,
   "sources": 6
  },
  {
@@ -260,7 +260,7 @@
   "region": "upper-arm",
   "side": "right",
   "kind": "muscle",
-  "faces": 340,
+  "faces": 240,
   "sources": 6
  }
 ]

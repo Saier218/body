@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>半握 · 方案二 部位与风格筛选</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../shared.css">
+<link rel="stylesheet" href="../skin.css">
+<link rel="stylesheet" href="../moves.css">
+</head>
+<body class="screen">
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__back" href="home.html" aria-label="返回动作列表"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>手指 · 全部风格</span></a>
+    <span class="nav__spacer"></span>
+    <span class="sample">示例文字</span>
+  </div>
+</header>
+<main class="doc">
+  <figure class="hero-art">
+    <svg viewBox="0 0 390 248" role="img" aria-label="半握的手部侧面示意：近指间关节明显弯曲，指尖压在岩点边缘">
+      <g transform="translate(24 2) scale(2.1)">
+        <path class="pose pose--dim" vector-effect="non-scaling-stroke" d="M4 86L40 60L76 46M12 102L46 80L80 64"/>
+        <path class="pose pose--dim" vector-effect="non-scaling-stroke" d="M76 46Q86 52 80 64"/>
+        <rect class="pose--hold" vector-effect="non-scaling-stroke" x="96" y="80" width="52" height="12" rx="2"/>
+        <polyline class="pose" style="stroke-width:6" points="79,55 102,44 106,66 114,78"/>
+        <circle class="pose--joint" cx="102" cy="44" r="3.2"/>
+        <circle class="pose--joint" cx="106" cy="66" r="3.2"/>
+      </g>
+      <path class="hero-art__lead" d="M238 92L196 56H120"/>
+      <text class="hero-art__label" x="120" y="50">近指间关节 PIP</text>
+      <text class="hero-art__val" x="120" y="72">（示例）约屈 90°</text>
+      <path class="hero-art__lead" d="M256 141L300 118H312"/>
+      <text class="hero-art__label" x="306" y="110">远指间关节</text>
+      <text class="hero-art__val" x="306" y="134">DIP</text>
+    </svg>
+    <div class="hero-art__top"><span class="pill">抓握方式</span></div>
+    <figcaption class="hero-art__cap">示意图，不是真实比例</figcaption>
+  </figure>
+
+  <div class="mv2-head">
+    <h1>半握</h1>
+    <p class="hero__latin latin" lang="en">Half crimp</p>
+    <p class="aliases"><b>别名</b>半扣 · 90° crimp（示例）</p>
+    <p class="mv-head__desc">（示例）近指间关节约屈 90°、指尖压在岩点边缘的抓法。此段为占位说明，正式内容需对照来源撰写。</p>
+    <span class="badge"><span class="badge__ico"><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><b>已对照来源</b><span class="badge__date">2026-11-20</span></span>
+    <a class="btn btn--3d" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"/></svg>在 3D 中查看用到的结构</a>
+  </div>
+
+  <div class="where">
+    <svg viewBox="0 0 64 96" aria-hidden="true">
+      <circle class="body-fig" cx="32" cy="9" r="6"/>
+      <path class="body-fig" d="M32 15V52M18 21H46M18 21L14 38M46 21L50 38M32 52L24 74L22 92M32 52L40 74L42 92"/>
+      <path class="body-fig body-fig--hi" d="M14 38L12 54L11 61M50 38L52 54L53 61"/>
+    </svg>
+    <div>
+      <p class="where__k">用到哪里</p>
+      <p class="where__main">手指 · 前臂</p>
+      <p class="where__sub">（示例）腕部负责稳定。点“在 3D 中查看”可看到具体结构。</p>
+    </div>
+  </div>
+
+  <div class="switch">
+    <input class="seg-input" type="radio" name="seg" id="seg-force" checked>
+    <input class="seg-input" type="radio" name="seg" id="seg-risk">
+    <div class="seg" role="presentation">
+      <label for="seg-force">发力结构<span class="seg__n">7</span></label>
+      <label for="seg-risk">易伤部位<span class="seg__n">3</span></label>
+    </div>
+
+    <div class="panel panel--force">
+      <div class="role-group">
+        <div class="role-group__head"><span class="tag tag--prime">主动肌</span></div>
+        <p class="role-group__desc">直接产生这个动作的肌肉。</p>
+        <ul class="rows">
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">指深屈肌</span><span class="row__sub latin" lang="en">Flexor digitorum profundus</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">指浅屈肌</span><span class="row__sub latin" lang="en">Flexor digitorum superficialis</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        </ul>
+      </div>
+      <div class="role-group">
+        <div class="role-group__head"><span class="tag tag--syn">协同肌</span></div>
+        <p class="role-group__desc">帮助主动肌完成动作。</p>
+        <ul class="rows">
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">蚓状肌</span><span class="row__sub latin" lang="en">Lumbricals</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">骨间肌</span><span class="row__sub latin" lang="en">Interossei</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        </ul>
+      </div>
+      <div class="role-group">
+        <div class="role-group__head"><span class="tag tag--stab">稳定肌</span></div>
+        <p class="role-group__desc">让关节保持在位，不直接产生动作。</p>
+        <ul class="rows">
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">腕伸肌群</span><span class="row__sub latin" lang="en">Wrist extensors</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        </ul>
+      </div>
+      <div class="role-group">
+        <div class="role-group__head"><span class="tag tag--passive">受力的非收缩结构</span></div>
+        <p class="role-group__desc">不会主动收缩，但在这个动作里承受拉力，例如滑车、韧带。</p>
+        <ul class="rows">
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">A2 滑车</span><span class="row__sub latin" lang="en">A2 pulley</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+          <li><a class="row row--plain" href="#"><span class="row__main"><span class="row__title">A4 滑车</span><span class="row__sub latin" lang="en">A4 pulley</span></span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel--risk">
+      <p class="hint">文献中常与这个抓法一起讨论的部位。只做一般说明，不代表个人情况。</p>
+      <a class="icard" href="#">
+        <span class="icard__k" style="display:block">A2 滑车 · A2 pulley</span>
+        <span class="icard__title" style="display:block">A2 滑车损伤</span>
+        <span class="icard__note" style="display:block">（示例）一句定性说明：为什么文献把这个部位和这个抓法放在一起讨论，附来源编号。</span>
+        <span class="icard__go"><span>看这种损伤是怎么回事</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="icard" href="#">
+        <span class="icard__k" style="display:block">A4 滑车 · A4 pulley</span>
+        <span class="icard__title" style="display:block">A4 滑车损伤</span>
+        <span class="icard__note" style="display:block">（示例）一句定性说明，附来源编号。</span>
+        <span class="icard__go"><span>看这种损伤是怎么回事</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="icard" href="#">
+        <span class="icard__k" style="display:block">近指间关节囊 · PIP joint capsule</span>
+        <span class="icard__title" style="display:block">关节囊劳损</span>
+        <span class="icard__note" style="display:block">（示例）一句定性说明，附来源编号。</span>
+        <span class="icard__go"><span>看这种损伤是怎么回事</span><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="sec__head"><h2>同一部位的其他动作</h2></div>
+    <div class="grid" style="padding:0">
+      <a class="card" href="#"><span class="card__art"><svg viewBox="0 0 160 112" aria-hidden="true"><path class="pose pose--dim" d="M4 86L40 60L76 46M12 102L46 80L80 64"/><path class="pose pose--dim" d="M76 46Q86 52 80 64"/><path class="pose--hold" d="M88 100Q122 66 156 100Z"/><polyline class="pose" style="stroke-width:7" points="79,55 100,59 115,70 123,81"/><circle class="pose--joint" cx="100" cy="59" r="3.5"/><circle class="pose--joint" cx="115" cy="70" r="3.5"/></svg></span><span class="card__body"><span class="card__name" style="display:block">开手握</span><span class="card__en" style="display:block" lang="en">Open hand</span></span></a>
+      <a class="card" href="#"><span class="card__art"><svg viewBox="0 0 160 112" aria-hidden="true"><path class="pose pose--dim" d="M4 86L40 60L76 46M12 102L46 80L80 64"/><path class="pose pose--dim" d="M76 46Q86 52 80 64"/><rect class="pose--hold" x="96" y="80" width="56" height="12" rx="2"/><polyline class="pose" style="stroke-width:7" points="79,55 98,36 104,62 118,78"/><polyline class="pose pose--dim" style="stroke-width:5" points="60,74 90,66 100,62"/><circle class="pose--joint" cx="98" cy="36" r="3.5"/><circle class="pose--joint" cx="104" cy="62" r="3.5"/></svg></span><span class="card__body"><span class="card__name" style="display:block">全握</span><span class="card__en" style="display:block" lang="en">Full crimp</span></span></a>
+    </div>
+  </section>
+</main>
+<footer class="dock">
+  <p class="disclaimer"><svg class="ico ico--sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg><span>本内容为运动科普，不能替代医生的面诊与判断</span></p>
+  <nav class="tabbar" aria-label="主导航">
+    <a class="tab" href="#"><span class="tab__ico"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4.8" r="2.3"/><path d="M5 10.5h14M12 8v8M12 16l-4 5.5M12 16l4 5.5"/></svg></span><span class="tab__label">身体</span></a>
+    <a class="tab" href="home.html" aria-current="page"><span class="tab__ico"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14.5l3-8 7.5-2 3.5 5.5-2 7.5-8 2z"/><circle cx="12" cy="12" r="1.6"/></svg></span><span class="tab__label">动作</span></a>
+    <a class="tab" href="#"><span class="tab__ico"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4.5l2.5-6 4 12 2.5-6H21"/></svg></span><span class="tab__label">损伤</span></a>
+    <a class="tab" href="#"><span class="tab__ico"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/></svg></span><span class="tab__label">我的</span></a>
+  </nav>
+  <div class="home-ind" aria-hidden="true"></div>
+</footer>
+</body>
+</html>

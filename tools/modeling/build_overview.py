@@ -21,7 +21,8 @@ import trimesh
 from glb_writer import to_app, write_glb
 
 inv_path, parts_path, objdir, out = sys.argv[1:5]
-TARGET = int(sys.argv[5]) if len(sys.argv) > 5 else 60000
+# 36k keeps the overview visually unchanged at phone size and leaves room in the 2 MB mini-program package
+TARGET = int(sys.argv[5]) if len(sys.argv) > 5 else 36000
 MIN_FACES = 240
 
 inv = {r["file"][:-4]: r for r in json.load(open(inv_path))}

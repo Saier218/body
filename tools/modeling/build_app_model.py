@@ -22,7 +22,8 @@ import trimesh
 from glb_writer import to_app, write_glb
 
 inv = json.load(open(sys.argv[1]))
-objdir, pulleys_glb, out, app = sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+objdir, pulleys_glb, out = sys.argv[2], sys.argv[3], sys.argv[4]
+app = sys.argv[5] if len(sys.argv) > 5 else None  # optional extra copy for the app shells (now done by tools/build-miniprogram.mjs)
 
 # right hand, wrist and forearm
 # x upper bound keeps hip muscles (the hand hangs beside the thigh) out of the region
@@ -91,8 +92,9 @@ centre = (allv.min(0) + allv.max(0)) / 2
 glb, tri = write_glb(out + ".glb", [(pid, to_app(v, centre), f) for pid, v, f, _ in parts], "body build_app_model.py")
 
 br = brotli.compress(glb, quality=11)
-open(app + ".glb.br", "wb").write(br)
-for prefix in (out, app):
+if app:
+    open(app + ".glb.br", "wb").write(br)
+for prefix in (out, app) if app else (out,):
     json.dump([p[3] for p in parts], open(prefix + ".catalog.json", "w"), ensure_ascii=False, separators=(",", ":"))
 kinds = {}
 for p in parts:
