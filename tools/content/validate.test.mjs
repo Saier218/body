@@ -1,7 +1,8 @@
 // Proves the validator actually rejects bad content: each test breaks one rule on a valid fixture.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validate } from './lib.mjs';
+import { validate, BANNED_ZH, BANNED_EN } from './lib.mjs';
+import { TEXT } from '../../packages/shared/src/text.ts';
 
 const T = (zh, en, sources = ['src-one']) => ({ zh, en, sources });
 const fixture = () => ({
@@ -261,3 +262,11 @@ rejects(
   },
   /has no group "tail"/,
 );
+test('interface text uses none of the banned wording', () => {
+  const hits = [];
+  for (const [key, v] of Object.entries(TEXT)) {
+    for (const w of BANNED_ZH) if (v.zh.includes(w)) hits.push(`${key}.zh: ${w}`);
+    for (const re of BANNED_EN) if (re.test(v.en)) hits.push(`${key}.en: ${re}`);
+  }
+  assert.deepEqual(hits, []);
+});

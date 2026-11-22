@@ -134,6 +134,15 @@ server.listen(0, '127.0.0.1', async () => {
     await page.waitForFunction(() => document.querySelector('#body-title')?.textContent === '全身', { timeout: 5000 });
     check('the back button returns to the whole body', !(await page.isVisible('.layers')));
 
+    // Re-entering a mirrored region must show the same hand again (the cached model must not stay mirrored).
+    await page.tap('#list-open');
+    await page.tap('[data-region="hand:left"]');
+    await page.waitForFunction(() => document.querySelector('#body-title')?.textContent === '左手', { timeout: 10000 });
+    await page.waitForTimeout(300);
+    check('re-entering the left hand shows the same left hand', leftShot.equals(await page.locator('#gl').screenshot()));
+    await page.tap('#back');
+    await page.waitForFunction(() => document.querySelector('#body-title')?.textContent === '全身', { timeout: 5000 });
+
     await page.tap('[data-tab="moves"]');
     check(
       'moves tab shows its placeholder',

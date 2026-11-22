@@ -99,6 +99,7 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
       if (!viewer) return;
       if (!r.detail) {
         setNotice({ region: r, side: s });
+        setListOpen(false);
         return;
       }
       const d = r.detail;
@@ -141,6 +142,8 @@ export function BodyScreen({ hidden, report, benchRequest, onBenchDone }: Props)
     window.clearTimeout(flyTimer.current);
     viewer.clear();
     viewer.load(ov.glb, ov.catalog);
+    // layer switches belong to region pages; the overview always shows everything
+    hiddenKinds.forEach((k) => viewer.setKindVisible(k, true));
     viewer.setOrbit(FRONT.theta, FRONT.phi);
     if (region) viewer.focus({ frame: [`${region.id}:${region.bilateral ? side : 'mid'}`], highlight: null, instant: true });
     viewer.focus({ frame: null, highlight: null });

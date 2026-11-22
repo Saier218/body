@@ -205,8 +205,9 @@ export class Viewer {
       const entry = byId.get(m.name);
       if (!entry) throw new Error('model part missing from catalog: ' + m.name);
       const geo = new BufferGeometry();
-      geo.setAttribute('position', new BufferAttribute(m.positions, 3));
-      geo.setIndex(new BufferAttribute(m.indices, 1));
+      // Copy out of the file buffer: setMirrored edits geometry in place, and the caller may load the same buffer again.
+      geo.setAttribute('position', new BufferAttribute(m.positions.slice(), 3));
+      geo.setIndex(new BufferAttribute(m.indices.slice(), 1));
       geo.computeVertexNormals();
       geo.computeBoundingSphere();
       const base = new Color(this.colors[entry.kind] ?? 0x999999);

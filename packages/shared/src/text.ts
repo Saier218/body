@@ -63,7 +63,7 @@ export const TEXT = {
     zh: '滑车由本项目依据解剖文献的测量数据建模，位置为推算，尚待专业人士确认。',
     en: 'The pulleys were modelled by this project from published measurements; their positions are derived and await professional review.',
   },
-  me_diag: { zh: '诊断与性能测试', en: 'Diagnostics and benchmark' },
+  me_diag: { zh: '运行信息与性能测试', en: 'Device info and benchmark' },
   me_diag_hint: {
     zh: '测试时会回到身体页并旋转模型约 4 秒。',
     en: 'The test returns to the Body tab and spins the model for about 4 seconds.',
