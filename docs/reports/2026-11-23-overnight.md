@@ -59,7 +59,7 @@
 1. 动作标签：方案一还是方案二？风格作筛选条件还是第一层？
 2. 损伤标签：方案一还是方案二？
 3. 在 GitHub 上把分支合并进 `main`（这一步我做不了）：打开仓库 → Pull requests → New pull request → base 选 `main`、compare 选 `night/architecture-foundation` → Create pull request → Merge。
-4. 方便时用 Windows 上的微信开发者工具试一下小程序，把诊断截图发我。
+4. 方便时用 Windows 上的微信开发者工具试一下小程序，把"我的"页面里的运行信息截图发我。
 
 ## 四、没做的
 
