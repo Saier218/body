@@ -2,11 +2,16 @@ import tseslint from 'typescript-eslint';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['**/dist/**', 'node_modules/**', 'android/**', 'ios/**', 'apps/miniprogram/**', 'docs/**', 'data/**', 'apps/app/public/**'] },
+  { ignores: ['**/dist/**', 'node_modules/**', 'android/**', 'ios/**', 'docs/**', 'data/**', 'apps/app/public/**', 'apps/miniprogram/libs/**'] },
   ...tseslint.configs.recommended,
   {
     files: ['tools/**/*.{js,mjs}'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
+  {
+    // Mini programs load the shared libraries as CommonJS modules.
+    files: ['apps/miniprogram/**/*.ts'],
     rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
   {

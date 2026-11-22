@@ -1,10 +1,24 @@
 {
-  "pages": ["pages/viewer/viewer"],
+  "pages": ["pages/body/body", "pages/moves/moves", "pages/injuries/injuries", "pages/me/me"],
   "window": {
-    "navigationBarTitleText": "3D 技术验证",
-    "navigationBarBackgroundColor": "#15171c",
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#15171c"
+    "navigationBarBackgroundColor": "#0d1014",
+    "backgroundColor": "#0d1014",
+    "backgroundTextStyle": "light",
+    "pageOrientation": "portrait"
+  },
+  "tabBar": {
+    "color": "#8a96a6",
+    "selectedColor": "#86d3e8",
+    "backgroundColor": "#141920",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/body/body", "text": "身体" },
+      { "pagePath": "pages/moves/moves", "text": "动作" },
+      { "pagePath": "pages/injuries/injuries", "text": "损伤" },
+      { "pagePath": "pages/me/me", "text": "我的" }
+    ]
   },
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"

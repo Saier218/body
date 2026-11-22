@@ -1,0 +1,29 @@
+<view class="screen screen--doc">
+  <view class="topbar" style="{{navStyle}}">
+    <text class="topbar__title" aria-role="heading">{{tx.title}}</text>
+  </view>
+  <scroll-view class="doc" scroll-y="{{true}}">
+    <view class="doc__pad">
+      <view class="group">
+        <text class="group__title">{{tx.language}}</text>
+        <view class="seg" aria-role="radiogroup" aria-label="{{tx.language}}">
+          <view wx:for="{{langs}}" wx:key="id" class="seg__opt {{lang === item.id ? 'is-on' : ''}}"
+                aria-role="radio" aria-checked="{{lang === item.id}}" data-lang="{{item.id}}" bindtap="onLang">{{item.label}}</view>
+        </view>
+      </view>
+      <view class="group">
+        <text class="group__title">{{tx.about}}</text>
+        <text class="group__text">{{tx.disclaimer}}</text>
+        <text class="group__text">{{tx.mirror}}</text>
+        <text class="group__text">{{tx.pulleys}}</text>
+        <text class="group__text group__text--small">{{tx.credit}}</text>
+      </view>
+      <view class="group">
+        <text class="group__title">{{tx.diag}}</text>
+        <text class="group__text group__text--small">{{tx.diagHint}}</text>
+        <view class="btn-line {{benchmarking ? 'is-disabled' : ''}}" aria-role="button" aria-disabled="{{benchmarking}}" bindtap="onBenchmark">{{benchLabel}}</view>
+        <text class="diag" user-select="{{true}}">{{diagText}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

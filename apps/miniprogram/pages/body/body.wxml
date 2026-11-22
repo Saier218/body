@@ -1,0 +1,133 @@
+<view class="screen screen--body">
+  <view class="topbar" style="{{navStyle}}">
+    <view wx:if="{{level === 'region'}}" class="back" aria-role="button" aria-label="{{tx.backLabel}}" bindtap="onBack">
+      <view class="i-chev i-chev--back"></view>
+      <text>{{tx.back}}</text>
+    </view>
+    <text class="topbar__title" aria-role="heading">{{title}}</text>
+    <view wx:if="{{level === 'region'}}" class="side {{sideRight ? 'is-right' : ''}}" aria-role="switch" aria-checked="{{sideRight}}" aria-label="{{tx.sideLabel}}" bindtap="onSide">
+      <text class="side__lbl {{sideRight ? '' : 'is-on'}}">{{tx.sideL}}</text>
+      <view class="side__track"><view class="side__knob"></view></view>
+      <text class="side__lbl {{sideRight ? 'is-on' : ''}}">{{tx.sideR}}</text>
+    </view>
+    <view wx:else class="icon-btn {{ready ? '' : 'is-disabled'}}" aria-role="button" aria-label="{{tx.reset}}" aria-disabled="{{!ready}}" bindtap="onReset">
+      <view class="i-reset"></view>
+    </view>
+  </view>
+
+  <view class="body-main">
+    <view class="stage">
+      <canvas wx:if="{{showCanvas}}" type="{{canvasType}}" id="gl" class="gl" disable-scroll="{{true}}"
+              bindtouchstart="onTouchStart" bindtouchmove="onTouchMove"
+              bindtouchend="onTouchEnd" bindtouchcancel="onTouchEnd"></canvas>
+      <view class="stage__top">
+        <view class="chip chip--quiet {{ready ? '' : 'is-disabled'}}" aria-role="button" aria-disabled="{{!ready}}" bindtap="onListOpen">
+          <view class="i-list"></view>
+          <text>{{tx.list}}</text>
+        </view>
+      </view>
+      <view class="stage__bottom">
+        <view class="credit">{{tx.credit}}</view>
+        <scroll-view wx:if="{{level === 'region'}}" class="layers" scroll-x="{{true}}" aria-label="{{tx.layers}}">
+          <view wx:for="{{layers}}" wx:key="kind" class="chip {{item.on ? 'is-on' : 'is-off'}}"
+                aria-role="button" aria-checked="{{item.on}}" data-kind="{{item.kind}}" bindtap="onLayer">
+            <view class="swatch" style="background: {{item.color}};"></view>
+            <text>{{item.label}}</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+
+    <scroll-view class="sheet" scroll-y="{{true}}">
+      <view class="sheet__inner">
+        <block wx:if="{{sheet === 'status'}}">
+          <text class="{{statusError ? 'sheet__error' : 'sheet__hint-title'}}">{{statusText}}</text>
+        </block>
+        <block wx:elif="{{sheet === 'notice'}}">
+          <text class="sheet__hint-title">{{noticeTitle}}</text>
+          <text class="sheet__hint">{{tx.pending}}</text>
+        </block>
+        <block wx:elif="{{sheet === 'ovhint'}}">
+          <text class="sheet__hint-title">{{tx.ovHint}}</text>
+          <text class="sheet__hint">{{tx.ovLegend}}</text>
+          <text class="sheet__hint">{{tx.gestures}}</text>
+        </block>
+        <block wx:elif="{{sheet === 'card' && card}}">
+          <view class="sheet__head">
+            <view class="sheet__head-main">
+              <text class="sheet__title">{{card.name}}</text>
+              <view class="sheet__latin">
+                <text wx:if="{{card.en}}">{{card.en}}</text><text wx:if="{{card.sep}}">{{card.sep}}</text><text wx:if="{{card.la}}" class="sheet__la">{{card.la}}</text>
+              </view>
+            </view>
+            <view class="sheet__close" aria-role="button" aria-label="{{tx.close}}" bindtap="onCardClose">
+              <view class="i-close"></view>
+            </view>
+          </view>
+          <view class="facts">
+            <view class="fact">
+              <text class="fact__k">{{card.regionK}}</text>
+              <text class="fact__v">{{card.regionV}}</text>
+            </view>
+            <view wx:if="{{card.incV}}" class="fact">
+              <text class="fact__k">{{card.incK}}</text>
+              <text class="fact__v">{{card.incV}}</text>
+            </view>
+          </view>
+          <view wx:if="{{card.links.length}}" class="links">
+            <view wx:for="{{card.links}}" wx:key="key" class="link">
+              <text class="link__k">{{item.k}}</text>
+              <text class="link__v">{{item.v}}</text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <text class="sheet__hint-title">{{tx.hintTitle}}</text>
+          <text class="sheet__hint">{{tx.gestures}}</text>
+        </block>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{listOpen}}" class="listview" aria-label="{{listTitle}}">
+      <view class="listview__head">
+        <view>
+          <text class="listview__title">{{listTitle}}</text>
+          <text class="listview__scope">{{listScope}}</text>
+        </view>
+        <view class="sheet__close" aria-role="button" aria-label="{{tx.close}}" bindtap="onListClose">
+          <view class="i-close"></view>
+        </view>
+      </view>
+      <scroll-view class="listview__body" scroll-y="{{true}}">
+        <view class="listview__pad">
+          <block wx:if="{{level === 'overview'}}">
+            <view wx:for="{{regionRows}}" wx:key="key" class="row" aria-role="button"
+                  data-region="{{item.region}}" data-side="{{item.side}}" bindtap="onRegionRow">
+              <view class="row__main">
+                <text class="row__title">{{item.title}}</text>
+                <text wx:if="{{item.sub}}" class="row__sub">{{item.sub}}</text>
+              </view>
+              <view wx:if="{{item.chevron}}" class="i-chev"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <view wx:for="{{groups}}" wx:for-item="group" wx:key="kind">
+              <view class="listgroup__title">
+                <view class="swatch" style="background: {{group.color}};"></view>
+                <text>{{group.head}}</text><text wx:if="{{group.note}}" class="row__note">{{group.note}}</text>
+              </view>
+              <view wx:for="{{group.rows}}" wx:key="key" class="row {{item.current ? 'is-current' : ''}}" aria-role="button"
+                    data-id="{{item.id}}" bindtap="onStructureRow">
+                <view class="row__main">
+                  <text class="row__title">{{item.title}}</text>
+                  <text class="row__sub">{{item.sub}}</text>
+                </view>
+                <view class="i-chev"></view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

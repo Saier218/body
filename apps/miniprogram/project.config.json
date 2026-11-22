@@ -1,14 +1,18 @@
 {
-  "description": "body 小程序技术验证工程",
+  "description": "climb-anatomy 小程序外壳（与 App 共用 3D 核心、内容与设计，决策 0012）",
   "compileType": "miniprogram",
   "appid": "touristappid",
-  "projectname": "body-spike",
+  "projectname": "climb-anatomy-miniprogram",
   "libVersion": "3.5.8",
   "setting": {
     "useCompilerPlugins": ["typescript"],
     "es6": true,
     "enhance": true,
     "minified": true,
-    "urlCheck": true
+    "ignoreDevUnusedFiles": false,
+    "ignoreUploadUnusedFiles": false
+  },
+  "packOptions": {
+    "ignore": [{ "type": "file", "value": "README.md" }]
   }
 }

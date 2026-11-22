@@ -1,0 +1,8 @@
+<view class="screen screen--doc">
+  <view class="topbar" style="{{navStyle}}">
+    <text class="topbar__title" aria-role="heading">{{title}}</text>
+  </view>
+  <view class="empty">
+    <text class="empty__text">{{body}}</text>
+  </view>
+</view>
